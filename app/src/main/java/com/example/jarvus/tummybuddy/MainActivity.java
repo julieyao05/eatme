@@ -1,5 +1,6 @@
 package com.example.jarvus.tummybuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
     private EditText edit_txt;
 
     @Override
@@ -31,7 +33,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView exampleView, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_NULL
                         && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    ((Button) findViewById(R.id.search_button)).performClick();
+                    Button searchButton = ((Button) findViewById(R.id.search_button));
+                    searchButton.performClick();
+                    searchButton.requestFocus();
                     return true;
                 }
                 return false;
@@ -70,6 +74,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void searchClicked(View view) {
-        edit_txt.setText("Search Clicked!", TextView.BufferType.EDITABLE);
+        edit_txt.setText("Search Clicked", TextView.BufferType.EDITABLE);
+    }
+
+    public void sixtyFourClicked(View view) {
+        int name = DisplayMenuActivity.MENU_SIXTY_FOUR;
+        loadMenu(name);
+    }
+
+    public void loadMenu(int menu) {
+        Intent intent = new Intent(this, DisplayMenuActivity.class);
+
+        intent.putExtra(EXTRA_DINING_HALL, menu);
+        startActivity(intent);
     }
 }

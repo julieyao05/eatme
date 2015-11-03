@@ -14,4 +14,5 @@
     <string name="button_pines">Pines</string>
     <string name="button_roots">Roots</string>
     <string name="button_bistro">The Bistro</string>
+    <string name="title_activity_display_menu">DisplayMenuActivity</string>
 </resources>
