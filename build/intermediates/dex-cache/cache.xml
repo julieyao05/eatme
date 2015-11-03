@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Program Files\GitHub\eatme\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="D:\Program Files\GitHub\eatme\app\build\intermediates\pre-dexed\debug\classes-b7c31e96401c965336d6e5d56efad2ebbbc4dbb0.jar" />
+    </item>
+    <item
+        jar="D:\Program Files\GitHub\eatme\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="D:\Program Files\GitHub\eatme\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-5e83b712f20a126fd528d6a7e990e0632206aa5c.jar" />
+    </item>
+    <item
+        jar="D:\Program Files\GitHub\eatme\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="D:\Program Files\GitHub\eatme\app\build\intermediates\pre-dexed\debug\classes-72166852be193cf1fac22a5f4a1936798000ad51.jar" />
+    </item>
+    <item
+        jar="D:\Program Files\GitHub\eatme\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="D:\Program Files\GitHub\eatme\app\build\intermediates\pre-dexed\debug\classes-08ec03e15149361a439eb077c493d00ad8cf41d1.jar" />
+    </item>
+    <item
+        jar="D:\Users\Leo\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="D:\Program Files\GitHub\eatme\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-345791a84cea9d3728c29f311701465639c13c71.jar" />
+    </item>
+
+</items>
