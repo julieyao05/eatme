@@ -42,33 +42,41 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_canyon" />
+        android:text="@string/button_canyon"
+        android:onClick="canyonVistaClicked"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_ventanas" />
+        android:text="@string/button_ventanas"
+        android:onClick="cafeVentanaClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_med" />
+        android:text="@string/button_med"
+        android:onClick="clubMedClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_foodworx" />
+        android:text="@string/button_foodworx"
+        android:onClick="foodWorxClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_goodys" />
+        android:text="@string/button_goodys"
+        android:onClick="goodysClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_pines" />
+        android:text="@string/button_pines"
+        android:onClick="pinesClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_roots" />
+        android:text="@string/button_roots"
+        android:onClick="rootsClicked" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_bistro" />
+        android:text="@string/button_bistro"
+        android:onClick="bistroClicked" />
 </LinearLayout>

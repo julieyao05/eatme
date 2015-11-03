@@ -82,6 +82,46 @@ public class MainActivity extends AppCompatActivity {
         loadMenu(name);
     }
 
+    public void canyonVistaClicked(View view) {
+        int name = DisplayMenuActivity.MENU_CANYON_VISTA;
+        loadMenu(name);
+    }
+
+    public void cafeVentanaClicked(View view) {
+        int name = DisplayMenuActivity.MENU_CAFE_VENTANAS;
+        loadMenu(name);
+    }
+
+    public void clubMedClicked(View view) {
+        int name = DisplayMenuActivity.MENU_CLUB_MED;
+        loadMenu(name);
+    }
+
+    public void foodWorxClicked(View view) {
+        int name = DisplayMenuActivity.MENU_FOODWORX;
+        loadMenu(name);
+    }
+
+    public void goodysClicked(View view) {
+        int name = DisplayMenuActivity.MENU_GOODYS;
+        loadMenu(name);
+    }
+
+    public void pinesClicked(View view) {
+        int name = DisplayMenuActivity.MENU_PINES;
+        loadMenu(name);
+    }
+
+    public void rootsClicked(View view) {
+        int name = DisplayMenuActivity.MENU_ROOTS;
+        loadMenu(name);
+    }
+
+    public void bistroClicked(View view) {
+        int name = DisplayMenuActivity.MENU_BISTRO;
+        loadMenu(name);
+    }
+
     public void loadMenu(int menu) {
         Intent intent = new Intent(this, DisplayMenuActivity.class);
 
