@@ -25,10 +25,29 @@ public class DisplayMenuActivity extends Activity {
 
         // Set variable as menu error by default
         int menu = getIntent().getIntExtra(MainActivity.EXTRA_DINING_HALL, MENU_ERROR);
-
+        String menuName = getString(R.string.error_loading);
         TextView textView = (TextView) findViewById(R.id.menu_name);
-        textView.setTextSize(40);
-        textView.setText("Menu num: " + menu);
+
+        if(menu == MENU_SIXTY_FOUR)
+            menuName = getString(R.string.button_sixty_four);
+        else if (menu == MENU_CANYON_VISTA)
+            menuName = getString(R.string.button_canyon);
+        else if (menu == MENU_CAFE_VENTANAS)
+            menuName = getString(R.string.button_ventanas);
+        else if (menu == MENU_CLUB_MED)
+            menuName = getString(R.string.button_med);
+        else if (menu == MENU_FOODWORX)
+            menuName = getString(R.string.button_foodworx);
+        else if (menu == MENU_GOODYS)
+            menuName = getString(R.string.button_goodys);
+        else if (menu == MENU_PINES)
+            menuName = getString(R.string.button_pines);
+        else if (menu == MENU_ROOTS)
+            menuName = getString(R.string.button_roots);
+        else if (menu == MENU_BISTRO)
+            menuName = getString(R.string.button_bistro);
+
+        textView.setText(menuName);
 
         // Set the text view as the activity layout
     }
