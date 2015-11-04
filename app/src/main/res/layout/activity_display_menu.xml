@@ -5,12 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     tools:context="com.example.jarvus.tummybuddy.DisplayMenuActivity">
 
     <TextView
         android:id="@+id/menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/title_activity_display_menu"
+        android:gravity="center_horizontal"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
+        android:paddingBottom="5dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/hours"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dining_halls_hours"
+        android:gravity="center_horizontal"
+        android:background="#ffffff"
+        android:textColor="#000000"
+        android:paddingBottom="5dp"
+        android:textSize="15sp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_activity_display_menu"
@@ -18,6 +41,7 @@
         android:background="@color/colorPrimaryDark"
         android:textColor="@android:color/white"
         android:paddingBottom="5dp"
-        android:textSize="20sp" />
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

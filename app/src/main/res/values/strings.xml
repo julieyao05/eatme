@@ -14,6 +14,8 @@
     <string name="button_pines">Pines</string>
     <string name="button_roots">Roots</string>
     <string name="button_bistro">The Bistro</string>
-    <string name="error_loading">Error loading menu</string>
+    <string name="error_loading">Error loading your request</string>
     <string name="title_activity_display_menu">DisplayMenuActivity</string>
+    <string name="breakfast">sixty_four_breakfast</string>
+    <string name="dining_halls_hours">dining_halls_hours</string>
 </resources>

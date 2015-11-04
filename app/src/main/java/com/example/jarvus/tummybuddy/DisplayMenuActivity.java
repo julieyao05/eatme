@@ -1,9 +1,11 @@
 package com.example.jarvus.tummybuddy;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class DisplayMenuActivity extends Activity {
     public static final int MENU_ERROR = -1;
@@ -17,6 +19,13 @@ public class DisplayMenuActivity extends Activity {
     public static final int MENU_ROOTS = 7;
     public static final int MENU_BISTRO = 8;
 
+   // public static final String hour_type1 = String.format("Mon - Thurs: %s am - %s pm \n Fri - Sun: %s am - % pm");
+    public static final String hour_type1 = "Mon - Thurs: %s \n Fri - Sun: %s ";
+    public static final String hour_type2 = "Mon - Thurs: %s \n Fri: %s | Sat - Sun: %s ";
+    public static final String hour_type3 = "Mon - Fri: %s \n Sat - Sun: %s";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,26 +37,55 @@ public class DisplayMenuActivity extends Activity {
         String menuName = getString(R.string.error_loading);
         TextView textView = (TextView) findViewById(R.id.menu_name);
 
-        if(menu == MENU_SIXTY_FOUR)
+        // Set hours of each dinning hall
+        String dining_hours = getString(R.string.error_loading);
+        TextView hour_text = (TextView) findViewById(R.id.hours);
+
+        // Set the current date
+        String currentDate = DateFormat.getDateInstance().format(new Date());
+        TextView date_text = (TextView) findViewById(R.id.date);
+
+        if(menu == MENU_SIXTY_FOUR) {
             menuName = getString(R.string.button_sixty_four);
-        else if (menu == MENU_CANYON_VISTA)
+            dining_hours = String.format(hour_type1, "10 am - 9 pm", "10 am - 8 pm");
+        }
+        else if (menu == MENU_CANYON_VISTA) {
             menuName = getString(R.string.button_canyon);
-        else if (menu == MENU_CAFE_VENTANAS)
+            dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
+        }
+        else if (menu == MENU_CAFE_VENTANAS) {
             menuName = getString(R.string.button_ventanas);
-        else if (menu == MENU_CLUB_MED)
+            dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
+        }
+        else if (menu == MENU_CLUB_MED) {
             menuName = getString(R.string.button_med);
-        else if (menu == MENU_FOODWORX)
+            dining_hours = String.format(hour_type3, "7:30 am - 2 pm", "Closed");
+        }
+        else if (menu == MENU_FOODWORX) {
             menuName = getString(R.string.button_foodworx);
-        else if (menu == MENU_GOODYS)
+            dining_hours = String.format(hour_type2, "7:30 am - 10 pm", "7:30 am - 8 pm", "10 am - 8 pm");
+        }
+        else if (menu == MENU_GOODYS) {
             menuName = getString(R.string.button_goodys);
-        else if (menu == MENU_PINES)
+            dining_hours = String.format(hour_type3, "8 am - 10 pm", "11 am - 10 pm");
+        }
+        else if (menu == MENU_PINES) {
             menuName = getString(R.string.button_pines);
-        else if (menu == MENU_ROOTS)
+            dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
+        }
+        else if (menu == MENU_ROOTS) {
             menuName = getString(R.string.button_roots);
-        else if (menu == MENU_BISTRO)
+            dining_hours = String.format(hour_type3, "11 am - 8 pm", "Closed");
+        }
+        else if (menu == MENU_BISTRO) {
             menuName = getString(R.string.button_bistro);
+            dining_hours = String.format(hour_type3, "11 am - 9 pm", "Closed");
+        }
 
         textView.setText(menuName);
+        hour_text.setText(dining_hours);
+        date_text.setText(currentDate);
+
 
         // Set the text view as the activity layout
     }
