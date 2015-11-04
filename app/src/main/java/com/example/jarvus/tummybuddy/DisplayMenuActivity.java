@@ -1,5 +1,6 @@
 package com.example.jarvus.tummybuddy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.TextView;
@@ -25,12 +26,14 @@ public class DisplayMenuActivity extends Activity {
         // Set variable as menu error by default
         int menu = getIntent().getIntExtra(MainActivity.EXTRA_DINING_HALL, MENU_ERROR);
 
-        TextView textView = new TextView(this);
+        TextView textView = (TextView) findViewById(R.id.menu_name);
         textView.setTextSize(40);
         textView.setText("Menu num: " + menu);
 
         // Set the text view as the activity layout
-        setContentView(textView);
     }
 
+    public void onBackPressed() {
+        finish();
+    }
 }
