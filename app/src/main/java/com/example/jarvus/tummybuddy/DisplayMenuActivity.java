@@ -3,6 +3,12 @@ package com.example.jarvus.tummybuddy;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.AdapterView;
+import android.view.View;
+
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -44,6 +50,36 @@ public class DisplayMenuActivity extends Activity {
         // Set the current date
         String currentDate = DateFormat.getDateInstance().format(new Date());
         TextView date_text = (TextView) findViewById(R.id.date);
+
+        // Create drop down menu
+        Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
+        final String[] items1 = new String[]{"Breakfast"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items1);
+        dropdown.setAdapter(adapter);
+
+        dropdown = (Spinner) findViewById(R.id.spinner2);
+        final String[] items2 = new String[]{"Lunch"};
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items2);
+        dropdown.setAdapter(adapter);
+
+        dropdown = (Spinner) findViewById(R.id.spinner3);
+        final String[] items3 = new String[]{"Dinner"};
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items3);
+        dropdown.setAdapter(adapter);
+
+        dropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+                items1[0] = "Coming Soon";
+                items2[0] = "Coming Soon";
+                items3[0] = "Coming Soon";
+                //selectedItem = items[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
         if(menu == MENU_SIXTY_FOUR) {
             menuName = getString(R.string.button_sixty_four);
