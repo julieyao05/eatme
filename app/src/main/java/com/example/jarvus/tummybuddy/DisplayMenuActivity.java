@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Calendar;
 
 public class DisplayMenuActivity extends Activity {
     public static final int MENU_ERROR = -1;
@@ -34,6 +35,7 @@ public class DisplayMenuActivity extends Activity {
     private TextView data_text;
     private String url_data;
     private int time = 0;
+    private int hour = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,37 +60,6 @@ public class DisplayMenuActivity extends Activity {
         String currentDate = DateFormat.getDateInstance().format(new Date());
         TextView date_text = (TextView) findViewById(R.id.date);
 
-        /*
-        // Create drop down menu
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
-        final String[] items1 = new String[]{"Breakfast"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items1);
-        dropdown.setAdapter(adapter);
-
-        dropdown = (Spinner) findViewById(R.id.spinner2);
-        final String[] items2 = new String[]{"Lunch"};
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items2);
-        dropdown.setAdapter(adapter);
-
-        dropdown = (Spinner) findViewById(R.id.spinner3);
-        final String[] items3 = new String[]{"Dinner"};
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items3);
-        dropdown.setAdapter(adapter);
-
-        dropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-                items1[0] = "Coming Soon";
-                items2[0] = "Coming Soon";
-                items3[0] = "Coming Soon";
-                //selectedItem = items[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-            }
-        });
-        */
 
         if(menu == MENU_SIXTY_FOUR) {
             menuName = getString(R.string.button_sixty_four);
@@ -140,17 +111,41 @@ public class DisplayMenuActivity extends Activity {
         hour_text.setText(dining_hours);
         date_text.setText(currentDate);
 
-        // Parsing data when clicking the button
-        Button btn = (Button) findViewById(R.id.data_button);
         data_text = (TextView) findViewById(R.id.textData);
+
+        // Parsing data when clicking the button
+        Button btn1 = (Button) findViewById(R.id.button1);
+        Button btn2 = (Button) findViewById(R.id.button2);
+        Button btn3 = (Button) findViewById(R.id.button3);
+
+
         //data_text.setMovementMethod(new ScrollingMovementMethod());
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                time = 1;
+                (new ParseURL()).execute(new String[]{url_data});
+            }
+        });
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                time = 2;
+                (new ParseURL()).execute(new String[]{url_data});
+            }
+        });
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                time = 3;
                 (new ParseURL()).execute(new String[]{url_data});
             }
         });
 
+        // Set the default menu
+        if( time == 0 ) {
+            new ParseURL().execute(new String[]{url_data});
+        }
         // Set the text view as the activity layout
     }
 
@@ -163,6 +158,10 @@ public class DisplayMenuActivity extends Activity {
         @Override
         protected String doInBackground(String... strings){
 
+            // Get the time of day
+            Calendar c = Calendar.getInstance();
+            hour = c.get(Calendar.HOUR_OF_DAY);
+
             StringBuffer buffer = new StringBuffer();
 
             try{
@@ -173,16 +172,24 @@ public class DisplayMenuActivity extends Activity {
 
                 // Get body
                 Elements menuList = doc.select("td.menuList");
-
+                // Set default menu
+                if(time == 0) {
+                    if(hour < 12){
+                        buffer.append(menuList.get(0).text());                    }
+                    else if(hour < 18) {
+                        buffer.append(menuList.get(1).text());                    }
+                    else {
+                        buffer.append(menuList.get(2).text());                    }
+                }
                 // append appropriate menu based on the value of "time" which is set by
                 // among breakfast, lunch or dinner button
-                if(time == 0){
+                if(time == 1){
                     buffer.append(menuList.get(0).text());
                 }
-                else if(time == 1){
+                else if(time == 2){
                     buffer.append(menuList.get(1).text());
                 }
-                else{
+                else if(time == 3){
                     buffer.append(menuList.get(2).text());
                 }
 
