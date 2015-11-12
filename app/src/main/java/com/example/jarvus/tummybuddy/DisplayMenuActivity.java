@@ -12,8 +12,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DisplayMenuActivity extends Activity {
     public static final int MENU_ERROR = -1;
@@ -162,36 +162,79 @@ public class DisplayMenuActivity extends Activity {
             Calendar c = Calendar.getInstance();
             hour = c.get(Calendar.HOUR_OF_DAY);
 
-            StringBuffer buffer = new StringBuffer();
-
+            StringBuffer buffer = null;
+            StringBuffer breakFast = new StringBuffer();
+            StringBuffer lunch = new StringBuffer();
+            StringBuffer dinner = new StringBuffer();
             try{
                 Document doc = Jsoup.connect(strings[0]).get();
+                int bld = 0;
 
                 // Get title
                 String title = doc.title();
 
                 // Get body
-                Elements menuList = doc.select("td.menuList");
+                Elements menuList = doc.select("table#MenuListing_tblDaily ul.itemList");
+                Elements section = doc.select("table#MenuListing_tblDaily td.menuList p.category");
+
+                String tmp = null;
+                int section_ctr = 0;
+                int numOfTags = 0;
+
+                for(int x=0; x<menuList.size(); x++){
+                    if(x == 0)
+                        buffer = breakFast;
+                    else if(x == 1)
+                        buffer = lunch;
+                    else
+                        buffer = dinner;
+
+                    int menu_ctr = 1;
+                    numOfTags = menuList.get(x).getElementsByTag("p").size() +
+                                     menuList.get(x).getElementsByTag("li").size();
+
+                    buffer.append("section : " + section.get(section_ctr).text() + "\n");
+
+                    //Test
+           //         buffer.append("numOfTags : " + numOfTags + "\n");
+         //           buffer.append("x : " + x + "\n");
+         //           buffer.append("p tag : " + menuList.get(x).getElementsByTag("p") + "\n");
+         //           buffer.append("li tag : " + menuList.get(x).getElementsByTag("li") + "\n");
+
+                    tmp = section.get(++section_ctr).text();
+
+                    // Iterate every menu for breakfast, lunch or dinner.
+                    while (menu_ctr < numOfTags) {
+                        if (tmp.equals(menuList.get(x).child(menu_ctr).text())) {
+                            buffer.append("\n\n");
+                            buffer.append("section : " + section.get(section_ctr).text() + "\n");
+                            menu_ctr++;
+                            if(! (section_ctr+1 == section.size()))
+                                tmp = section.get(++section_ctr).text();
+                        }
+                        buffer.append(menuList.get(x).child(menu_ctr).text() + "\n");
+                        menu_ctr++;
+                    }
+                }
+
                 // Set default menu
                 if(time == 0) {
-                    if(hour < 12){
-                        buffer.append(menuList.get(0).text());                    }
-                    else if(hour < 18) {
-                        buffer.append(menuList.get(1).text());                    }
-                    else {
-                        buffer.append(menuList.get(2).text());                    }
+                    if(hour < 12)
+                        buffer = breakFast;
+                    else if(hour < 18)
+                        buffer = lunch;
+                    else
+                     buffer = dinner;
                 }
+
                 // append appropriate menu based on the value of "time" which is set by
                 // among breakfast, lunch or dinner button
-                if(time == 1){
-                    buffer.append(menuList.get(0).text());
-                }
-                else if(time == 2){
-                    buffer.append(menuList.get(1).text());
-                }
-                else if(time == 3){
-                    buffer.append(menuList.get(2).text());
-                }
+                if(time == 1)
+                    buffer = breakFast;
+                else if(time == 2)
+                    buffer = lunch;
+                else if(time == 3)
+                    buffer = dinner;
 
             }catch(Throwable t){
                 t.printStackTrace();
@@ -204,5 +247,9 @@ public class DisplayMenuActivity extends Activity {
             super.onPostExecute(s);
             data_text.setText(s);
         }
+    }
+
+    private void separateMenu(int hour) {
+
     }
 }
