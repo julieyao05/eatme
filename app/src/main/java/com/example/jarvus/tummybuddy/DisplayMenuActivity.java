@@ -36,6 +36,7 @@ public class DisplayMenuActivity extends Activity {
     private String url_data;
     private int time = 0;
     private int hour = 0;
+    private boolean is_Special = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class DisplayMenuActivity extends Activity {
             menuName = getString(R.string.button_med);
             dining_hours = String.format(hour_type3, "7:30 am - 2 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=15";
+            is_Special = true;
         }
         else if (menu == MENU_FOODWORX) {
             menuName = getString(R.string.button_foodworx);
@@ -90,6 +92,7 @@ public class DisplayMenuActivity extends Activity {
             menuName = getString(R.string.button_goodys);
             dining_hours = String.format(hour_type3, "8 am - 10 pm", "11 am - 10 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=06";
+            is_Special = true;
         }
         else if (menu == MENU_PINES) {
             menuName = getString(R.string.button_pines);
@@ -100,11 +103,13 @@ public class DisplayMenuActivity extends Activity {
             menuName = getString(R.string.button_roots);
             dining_hours = String.format(hour_type3, "11 am - 8 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=32";
+            is_Special = true;
         }
         else if (menu == MENU_BISTRO) {
             menuName = getString(R.string.button_bistro);
             dining_hours = String.format(hour_type3, "11 am - 9 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=27";
+            is_Special = true;
         }
 
         textView.setText(menuName);
@@ -166,40 +171,57 @@ public class DisplayMenuActivity extends Activity {
             StringBuffer breakFast = new StringBuffer();
             StringBuffer lunch = new StringBuffer();
             StringBuffer dinner = new StringBuffer();
+
             try{
                 Document doc = Jsoup.connect(strings[0]).get();
-                int bld = 0;
 
                 // Get title
                 String title = doc.title();
 
+                Elements menuList;
+                Elements section;
+
                 // Get body
-                Elements menuList = doc.select("table#MenuListing_tblDaily ul.itemList");
-                Elements section = doc.select("table#MenuListing_tblDaily td.menuList p.category");
+                if(is_Special == true){
+                    menuList = doc.select("table.menuContainer td.specialtyMenuList ul.SpecialtyItemList");
+                    section = doc.select("table.menuContainer p.category");
+                }else{
+                    menuList = doc.select("table#MenuListing_tblDaily ul.itemList");
+                    section = doc.select("table#MenuListing_tblDaily td.menuList p.category");
+                }
 
                 String tmp = null;
                 int section_ctr = 0;
                 int numOfTags = 0;
 
                 for(int x=0; x<menuList.size(); x++){
-                    if(x == 0)
-                        buffer = breakFast;
-                    else if(x == 1)
-                        buffer = lunch;
-                    else
-                        buffer = dinner;
 
+                    if(menuList.size() == 2){
+                        if(x == 0){
+                            breakFast.append(section.get(0).text());
+                            section.remove(0);
+                            buffer = lunch;
+                        }
+                        else if(x == 1)
+                            buffer = dinner;
+                    }else if(menuList.size()==3){
+                        if(x == 0)
+                            buffer = breakFast;
+                        else if(x == 1)
+                            buffer = lunch;
+                        else
+                            buffer = dinner;
+                    }else{
+                        // Menu for breakfast, lunch and dinner is same
+                        buffer = breakFast = lunch = dinner;
+                    }
+
+                    // Assign buffer ref to appripriate object among breakfast, lunch and dinner
                     int menu_ctr = 1;
                     numOfTags = menuList.get(x).getElementsByTag("p").size() +
                                      menuList.get(x).getElementsByTag("li").size();
 
                     buffer.append("section : " + section.get(section_ctr).text() + "\n");
-
-                    //Test
-           //         buffer.append("numOfTags : " + numOfTags + "\n");
-         //           buffer.append("x : " + x + "\n");
-         //           buffer.append("p tag : " + menuList.get(x).getElementsByTag("p") + "\n");
-         //           buffer.append("li tag : " + menuList.get(x).getElementsByTag("li") + "\n");
 
                     tmp = section.get(++section_ctr).text();
 
@@ -239,6 +261,7 @@ public class DisplayMenuActivity extends Activity {
             }catch(Throwable t){
                 t.printStackTrace();
             }
+
             return buffer.toString();
         }
 
