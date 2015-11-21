@@ -16,8 +16,23 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <SearchView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search"
+            android:queryHint="Search for an item."
+            android:layout_gravity="right" />
 
+        <ProgressBar
+            android:id="@+id/toolbar_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="#795548"
+            android:indeterminateTintMode="src_in"
+            android:layout_gravity="right"
+            />
+    </android.support.v7.widget.Toolbar>
 
     <include layout="@layout/content_main" />
 
