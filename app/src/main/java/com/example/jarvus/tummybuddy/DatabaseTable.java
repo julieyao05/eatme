@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class DatabaseTable {
 
+
     private static final String TAG = "DictionaryDatabase";
 
     //The columns we'll include in the dictionary table
@@ -38,6 +39,9 @@ public class DatabaseTable {
     private static final int DATABASE_VERSION = 1;
 
     private final DatabaseOpenHelper mDatabaseOpenHelper;
+
+
+
 
     public DatabaseTable(Context context) {
         mDatabaseOpenHelper = new DatabaseOpenHelper(context);
@@ -89,6 +93,8 @@ public class DatabaseTable {
             mDatabase = db;
             mDatabase.execSQL(FTS_TABLE_CREATE);
             loadMenu();
+
+
         }
 
         @Override
@@ -113,14 +119,14 @@ public class DatabaseTable {
 
         public StringBuffer loadMenuItems(){
             String[] toLoad = {"http://hdh.ucsd.edu/DiningMenus/default.aspx?i=64",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=24",
+                    //"http://hdh.ucsd.edu/DiningMenus/default.aspx?i=24",
                     "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=18",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=15",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=11",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=06",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=01",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=32",
-                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=27"};
+                    "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=15",};
+                   // "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=11",
+                   // "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=06",
+                   // "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=01",
+                   // "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=32",
+                    //"http://hdh.ucsd.edu/DiningMenus/default.aspx?i=27"};
             StringBuffer buffer = null;
 
             try {
@@ -174,6 +180,7 @@ public class DatabaseTable {
         }
 
         public long addItem(String hall, String item, String cost, String id) {
+
             ContentValues initialValues = new ContentValues();
             initialValues.put(COL_HALL, hall);
             initialValues.put(COL_ITEM, item);

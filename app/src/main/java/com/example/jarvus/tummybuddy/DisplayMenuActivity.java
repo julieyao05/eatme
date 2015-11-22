@@ -38,15 +38,14 @@ public class DisplayMenuActivity extends Activity {
     private int hour = 0;
     private boolean is_Special = false;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_menu);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //LinearLayout wholePage = (LinearLayout) findViewById(R.id.whole_page);
-        //wholePage.setMovementMethod(new ScrollingMovementMethod());
-        //data_text.setMovementMethod(new ScrollingMovementMethod());
 
         // Set variable as menu error by default
         int menu = getIntent().getIntExtra(MainActivity.EXTRA_DINING_HALL, MENU_ERROR);
@@ -61,12 +60,12 @@ public class DisplayMenuActivity extends Activity {
         String currentDate = DateFormat.getDateInstance().format(new Date());
         TextView date_text = (TextView) findViewById(R.id.date);
 
-
         if(menu == MENU_SIXTY_FOUR) {
             menuName = getString(R.string.button_sixty_four);
             dining_hours = String.format(hour_type1, "10 am - 9 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=64";
-        }
+
+             }
         else if (menu == MENU_CANYON_VISTA) {
             menuName = getString(R.string.button_canyon);
             dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");

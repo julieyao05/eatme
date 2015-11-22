@@ -1,7 +1,7 @@
 package com.example.jarvus.tummybuddy;
 
+import android.app.Application;
 import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,20 +13,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
 
     private DatabaseTable db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         (new LoadDB(this)).execute();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        //loadMenu();
+
+
 
         //handleIntent(getIntent());
 
@@ -149,4 +159,28 @@ public class MainActivity extends AppCompatActivity {
             setDB(db);
         }
     }
+
+    public static class ParseApplication extends Application {
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+
+            Parse.enableLocalDatastore(this);
+            Parse.initialize(this, "2s0GrgbG5sY5OMVcemUzWe4TYLz86tLfRMp8ISTa", "wEjMG8yFL5GjR01PIzSLIpMlDJH5ghHXRPeoTmXm");
+
+            ParseObject diningObj = new ParseObject("DiningHall");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
+            try{
+                if(query.count() == 0){
+                    DataBase db = new DataBase();
+                    db.collectData(diningObj);
+                }
+            }catch(Exception e){}
+
+
+        }
+    }
 }
+
+
