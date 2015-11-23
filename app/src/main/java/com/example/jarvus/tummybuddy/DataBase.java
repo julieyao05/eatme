@@ -124,6 +124,16 @@ public class DataBase {
                 buffer.append(title + ":" +
                         menuList.get(x).text().replaceAll("\u00a0(\u00a0)+", ":") + ":" +
                         menuList.get(x).attr("href").replaceAll("[^0-9]", "") +"\n");
+
+                /*
+                // Returns elements as such
+                //Vegetable Tempura  ($7.00)  : vegetarian item
+                //Bistro Green Salad  ($6.00)   : vegan item
+                //Soy-Gingered Salmon Cake Salad  ($8.00)  : gluten free item
+                Elements vegans;
+                if((vegans = menuList.get(x).select("img")).size() > 0)
+                    buffer.append(menuList.get(x).text() + " : " + vegans.first().attr("alt") + '\n');
+                */
             }
             //    testObject.put("menu", "x is "+x);
              //           testObject.saveInBackground();
