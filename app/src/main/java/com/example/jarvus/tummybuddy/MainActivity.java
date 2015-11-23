@@ -22,23 +22,14 @@ import com.parse.ParseQuery;
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
 
-    private DatabaseTable db;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        (new LoadDB(this)).execute();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        //loadMenu();
-
-
-
-        //handleIntent(getIntent());
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -49,19 +40,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
     }
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Cursor c = db.getWordMatches(query, null);
 
-            TextView test = (TextView) findViewById(R.id.disp);
-
-            if(c != null)
-                test.setText(c.getString(c.getColumnIndex("ITEM")));
-            else
-                test.setText("Search failure");
-        }
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -136,28 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
         intent.putExtra(EXTRA_DINING_HALL, menu);
         startActivity(intent);
-    }
-    public void setDB(DatabaseTable d) {
-        this.db = d;
-    }
-
-    private class LoadDB extends AsyncTask<Void, Void, Void> {
-        private Context mContext;
-        private DatabaseTable db;
-        public LoadDB(Context context) {
-            mContext = context;
-            db = null;
-        }
-        protected Void doInBackground(Void... params) {
-            db = new DatabaseTable(mContext);
-            return null;
-        }
-
-        protected void onPostExecute(Void res) {
-            ProgressBar progressBar = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
-            progressBar.setVisibility(View.GONE);
-            setDB(db);
-        }
     }
 
     public static class ParseApplication extends Application {
