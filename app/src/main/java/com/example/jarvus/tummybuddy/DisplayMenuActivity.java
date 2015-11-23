@@ -1,21 +1,28 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DisplayMenuActivity extends Activity {
+public class DisplayMenuActivity extends ListActivity {
     public static final int MENU_ERROR = -1;
     public static final int MENU_SIXTY_FOUR = 0;
     public static final int MENU_CANYON_VISTA = 1;
@@ -37,9 +44,9 @@ public class DisplayMenuActivity extends Activity {
     private int time = 0;
     private int hour = 0;
     private boolean is_Special = false;
-
-
-
+    private ArrayList<Object> items;
+    private ItemAdapter iAdapt;
+    private  ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,10 @@ public class DisplayMenuActivity extends Activity {
         setContentView(R.layout.activity_display_menu);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        listView = getListView();
+        items = new ArrayList<>();
+        iAdapt = new ItemAdapter(this, items);
+        listView.setAdapter(iAdapt);
         // Set variable as menu error by default
         int menu = getIntent().getIntExtra(MainActivity.EXTRA_DINING_HALL, MENU_ERROR);
         String menuName = getString(R.string.error_loading);
@@ -115,8 +126,6 @@ public class DisplayMenuActivity extends Activity {
         hour_text.setText(dining_hours);
         date_text.setText(currentDate);
 
-        data_text = (TextView) findViewById(R.id.textData);
-
         // Parsing data when clicking the button
         Button btn1 = (Button) findViewById(R.id.button1);
         Button btn2 = (Button) findViewById(R.id.button2);
@@ -151,6 +160,31 @@ public class DisplayMenuActivity extends Activity {
             new ParseURL().execute(new String[]{url_data});
         }
         // Set the text view as the activity layout
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int pos, long id) {
+        super.onListItemClick(l, v, pos, id);
+        Object o = listView.getItemAtPosition(pos);
+        Item it = (Item) o;
+
+        Toast.makeText(this, it.getName() + " clicked.", Toast.LENGTH_SHORT).show();
+
+        // TODO: Lookup menu item name in database and launch URL with correct id.
+        // set id of it by lookup.
+        if (it.hasID()) {
+            try {
+                String nutri_link = "http://hdh.ucsd.edu/DiningMenus/nutritionfacts.aspx?i=" + it.getID();
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(nutri_link));
+                startActivity(myIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No application can handle this request."
+                        + " Please install a web browser", Toast.LENGTH_SHORT).show();
+                //e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, "No Nutrition Facts Found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onBackPressed() {
@@ -218,22 +252,21 @@ public class DisplayMenuActivity extends Activity {
                     // Assign buffer ref to appripriate object among breakfast, lunch and dinner
                     int menu_ctr = 1;
                     numOfTags = menuList.get(x).getElementsByTag("p").size() +
-                                     menuList.get(x).getElementsByTag("li").size();
+                            menuList.get(x).getElementsByTag("li").size();
 
-                    buffer.append("section : " + section.get(section_ctr).text() + "\n");
+                    buffer.append("section:" + section.get(section_ctr).text());
 
                     tmp = section.get(++section_ctr).text();
-
                     // Iterate every menu for breakfast, lunch or dinner.
                     while (menu_ctr < numOfTags) {
                         if (tmp.equals(menuList.get(x).child(menu_ctr).text())) {
-                            buffer.append("\n\n");
-                            buffer.append("section : " + section.get(section_ctr).text() + "\n");
+
+                            buffer.append("\nsection:" + section.get(section_ctr).text());
                             menu_ctr++;
                             if(! (section_ctr+1 == section.size()))
                                 tmp = section.get(++section_ctr).text();
                         }
-                        buffer.append(menuList.get(x).child(menu_ctr).text() + "\n");
+                        buffer.append("\n" + menuList.get(x).child(menu_ctr).text());
                         menu_ctr++;
                     }
                 }
@@ -267,11 +300,24 @@ public class DisplayMenuActivity extends Activity {
         @Override
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            data_text.setText(s);
+            if(!items.isEmpty())
+                items.clear();
+            String[] ls = s.split("\n");
+
+            for(String str : ls) {
+                String[] strSp = str.split(":");
+                if(strSp[0].equals("section")) {
+                    items.add(strSp[1]);
+                } else {
+                    strSp = strSp[0].split("\u00a0\u00a0");
+                    Item it = new Item(strSp[0]);
+
+                    if(strSp.length > 1)
+                        it.setPrice(strSp[1]);
+                    items.add(it);
+                }
+            }
+            iAdapt.notifyDataSetChanged();
         }
-    }
-
-    private void separateMenu(int hour) {
-
     }
 }
