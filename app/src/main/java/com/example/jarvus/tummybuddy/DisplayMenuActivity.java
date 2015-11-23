@@ -309,7 +309,7 @@ public class DisplayMenuActivity extends ListActivity {
                 if(strSp[0].equals("section")) {
                     items.add(strSp[1]);
                 } else {
-                    strSp = strSp[0].split("\u00a0\u00a0");
+                    strSp = strSp[0].split("\u00a0(\u00a0)+");
                     Item it = new Item(strSp[0]);
 
                     if(strSp.length > 1)
