@@ -1,17 +1,23 @@
 package com.example.jarvus.tummybuddy;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +27,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class DisplayMenuActivity extends ListActivity {
     public static final int MENU_ERROR = -1;
@@ -170,8 +177,23 @@ public class DisplayMenuActivity extends ListActivity {
 
         Toast.makeText(this, it.getName() + " clicked.", Toast.LENGTH_SHORT).show();
 
-        // TODO: Lookup menu item name in database and launch URL with correct id.
-        // set id of it by lookup.
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
+        query.whereEqualTo("menu", it.getName());
+
+        try {
+            List<ParseObject> objects = query.find();
+            if (objects != null && objects.size() > 0) {
+                for (ParseObject dealsObject : objects) {
+                    String uid = (String)dealsObject.get("distinct_id");
+                    if(uid.matches("[-+]?\\d*\\.?\\d+")) {
+                        it.setID(uid);
+                    }
+                }
+            }
+        } catch (ParseException e) {
+            Log.d("distinct_id", "Error: " + e.getMessage());
+        }
+
         if (it.hasID()) {
             try {
                 String nutri_link = "http://hdh.ucsd.edu/DiningMenus/nutritionfacts.aspx?i=" + it.getID();
