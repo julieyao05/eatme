@@ -1,19 +1,15 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.Application;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.SearchView;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -21,6 +17,7 @@ import com.parse.ParseQuery;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +26,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+
+        /*
+        searchView = (SearchView) findViewById(R.id.search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                SearchActivity search = new SearchActivity();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                return false;
+            }
+        });
+*/
+
+
+        Button bt = (Button) findViewById(R.id.buttonTest);
+        bt.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View arg0){
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+
+                startActivity(intent);
+            }
+        });
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -41,10 +69,24 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+/*
         // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+       // searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+*/
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
