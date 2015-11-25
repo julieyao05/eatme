@@ -13,22 +13,15 @@
             android:layout_height="wrap_content"
             android:text="Calories"
             android:id="@+id/calories_button"
-            android:layout_weight="0.33" />
+            android:layout_weight="0.48" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Price"
             android:id="@+id/price_button"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.33" />
+            android:layout_weight="0.47" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wish List"
-            android:id="@+id/wishList_button"
-            android:layout_weight="0.37" />
     </LinearLayout>
 
     <TextView

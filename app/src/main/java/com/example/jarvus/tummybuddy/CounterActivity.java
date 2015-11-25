@@ -11,10 +11,10 @@ public class CounterActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_activity);
+        setContentView(R.layout.counter_activity);
 
         int counter = 0;
-        //counter = getIntent().getIntExtra(MainActivity.COUNTER, MENU_ERROR);
+        //counter_activity = getIntent().getIntExtra(MainActivity.COUNTER, MENU_ERROR);
 
         if(counter == 0){
             calories_counter();
@@ -26,7 +26,7 @@ public class CounterActivity extends Activity{
     }
 
     void calories_counter(){
-        
+
     }
 
     void price_counter(){

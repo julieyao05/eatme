@@ -27,66 +27,33 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-        /*
-        searchView = (SearchView) findViewById(R.id.search);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        Button searchBt = (Button) findViewById(R.id.search_page);
+        searchBt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String text) {
-                SearchActivity search = new SearchActivity();
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String text) {
-                return false;
-            }
-        });
-*/
-
-
-        Button bt = (Button) findViewById(R.id.buttonTest);
-        bt.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View arg0){
+            public void onClick(View arg0) {
                 Intent intent = new Intent(MainActivity.this, SearchActivity.class);
 
                 startActivity(intent);
             }
         });
 
+        Button wishListBt = (Button) findViewById(R.id.wishList_page);
+        wishListBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(MainActivity.this, WishListActivity.class);
+                startActivity(intent);
+            }
+        });
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
     }
 
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-/*
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-       // searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-*/
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         return true;
     }
 
@@ -181,5 +148,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
-

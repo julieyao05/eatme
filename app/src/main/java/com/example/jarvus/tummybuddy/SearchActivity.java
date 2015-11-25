@@ -31,17 +31,11 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
 
-       // Parse.enableLocalDatastore(this);
-        //Parse.initialize(this, "2s0GrgbG5sY5OMVcemUzWe4TYLz86tLfRMp8ISTa", "wEjMG8yFL5GjR01PIzSLIpMlDJH5ghHXRPeoTmXm");
-
         editSearch = (EditText)findViewById(R.id.editText1);
         listView = (ListView)findViewById(R.id.search_list);
 
-    //    ParseObject diningHall = new ParseObject("DiningHall");
-    //    String menuList = (String)diningHall.get("menu");
-
-
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("DiningHall");
+        query.setLimit(1000);
         query.findInBackground(new FindCallback<ParseObject>(){
 
             @Override
@@ -53,25 +47,10 @@ public class SearchActivity extends Activity {
                     String menu = obj.getString("menu");
                     mItems.add(menu);
                 }
-             //   TextView tmp = (TextView) findViewById(R.id.search_text);
-             //   tmp.setText("It is NOT null and \n"+mItems.toString());
-             //   if(mItems.toString() == null){
-              //      tmp.setText("It is NULL");
-              //  }
             }
         });
 
-   //     TextView tmp = (TextView) findViewById(R.id.search_text);
-    //    tmp.setText("menu List is : \n" + mItems.toString());
-
-
         mItems = new ArrayList<String>();
-       // mItems.add("test1");
-       // mItems.add("qdass");
-      //  mItems.add("vvvvv");
-      //  mItems.add("fffff");
-      //  mItems.add("asdasd");
-
         listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mItems));
 
         editSearch.addTextChangedListener(new TextWatcher() {
@@ -95,10 +74,8 @@ public class SearchActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) { }
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
         });
-
     }
 }
