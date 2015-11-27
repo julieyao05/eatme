@@ -15,6 +15,9 @@ import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.ParseException;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
     SearchView searchView;
@@ -138,11 +141,17 @@ public class MainActivity extends AppCompatActivity {
             ParseObject diningObj = new ParseObject("DiningHall");
             ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
             try{
-                if(query.count() == 0){
-                    DataBase db = new DataBase();
-                    db.collectData(diningObj);
+                List<ParseObject> objects = query.find();
+                if(objects.size() != 0) {
+                    for (ParseObject entry : objects) {
+                        entry.deleteInBackground();
+                    }
                 }
-            }catch(Exception e){}
+                DataBase db = new DataBase();
+                db.collectData(diningObj);
+            } catch(com.parse.ParseException e) {
+                e.printStackTrace();
+            }
 
 
         }

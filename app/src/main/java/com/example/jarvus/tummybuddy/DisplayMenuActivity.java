@@ -326,20 +326,24 @@ public class DisplayMenuActivity extends ListActivity {
                 items.clear();
             String[] ls = s.split("\n");
 
-            for(String str : ls) {
-                String[] strSp = str.split(":");
-                if(strSp[0].equals("section")) {
-                    items.add(strSp[1]);
-                } else {
-                    strSp = strSp[0].split("\u00a0(\u00a0)+");
-                    Item it = new Item(strSp[0]);
+            if(ls.length == 1 && ls[0].equals(""))
+                items.add("No menu items found");
+            else
+                for(String str : ls) {
+                    String[] strSp = str.split(":");
+                    if(strSp[0].equals("section")) {
+                        items.add(strSp[1]);
+                    } else {
+                        strSp = strSp[0].split("\u00a0(\u00a0)+");
+                        Item it = new Item(strSp[0]);
 
-                    if(strSp.length > 1)
-                        it.setPrice(strSp[1]);
-                    items.add(it);
+                        if(strSp.length > 1)
+                            it.setPrice(strSp[1]);
+                        items.add(it);
+                    }
                 }
-            }
-            iAdapt.notifyDataSetChanged();
+
+                iAdapt.notifyDataSetChanged();
         }
     }
 }

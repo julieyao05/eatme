@@ -18,7 +18,7 @@
     <string name="title_activity_display_menu">DisplayMenuActivity</string>
     <string name="breakfast">sixty_four_breakfast</string>
     <string name="dining_halls_hours">dining_halls_hours</string>
-    <string name="search_hint">Type your serch here!</string>
+    <string name="search_hint">Type an item to search here!</string>
     <string name="title_search_activity">searchActivity</string>
     <string name="search_title">search!!</string>
     <string name="title_wishlist_activity">WishList</string>

@@ -9,6 +9,7 @@ import com.parse.SaveCallback;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
@@ -56,7 +57,6 @@ public class DataBase {
 
         String line;
         Set<String> itemSet = new HashSet<>();
-        Set<String> dhallSet = new HashSet<>();
 
         try{
             List<ParseObject> list = new ArrayList<>();
@@ -67,20 +67,37 @@ public class DataBase {
             String[] sArray = TextUtils.split(line, ":");
             if( (itemSet.add(sArray[1]))  ){
                 if (sArray.length == 4) {
-                    testObject.put("diningHall", sArray[0]);
+                    String[] tags = sArray[0].split(";");
+
+                    if(tags.length > 1) {
+                        String tag = tags[0];
+                        for(int i = 1; i < tags.length - 1; i++)
+                            tag += "," + tags[i];
+
+                        testObject.put("tags", tag);
+                    } else
+                        testObject.put("tags", "null");
+                    testObject.put("diningHall", tags[tags.length - 1]);
                     testObject.put("menu", sArray[1]);
                     testObject.put("price", sArray[2]);
                     testObject.put("distinct_id", sArray[3]);
                 } else if (sArray.length == 3) {
-                    testObject.put("diningHall", sArray[0]);
+                    String[] tags = sArray[0].split(";");
+
+                    if(tags.length > 1) {
+                        String tag = tags[0];
+                        for(int i = 1; i < tags.length - 1; i++)
+                                tag += "," + tags[i];
+
+                        testObject.put("tags", tag);
+                    } else
+                        testObject.put("tags", "null");
+
+                    testObject.put("diningHall", tags[tags.length - 1]);
                     testObject.put("menu", sArray[1]);
                     testObject.put("price", "Cost Unknown");
                     testObject.put("distinct_id", sArray[2]);
-                } else if (sArray.length == 2){
-                    testObject.put("diningHall", sArray[0]);
-                    testObject.put("menu", sArray[1]);
-                }
-                else {
+                } else {
                     continue;
                 }
                 list.add(testObject);
@@ -121,19 +138,18 @@ public class DataBase {
 
             for(int x = 0; x<menuList.size(); x++){
 
+                //Add Tags as such tag1;tag2;tag3;
+                for (Element tag : menuList.get(x).siblingElements().select("img")) {
+                    String tagN = tag.attr("alt");
+                    if(tagN.matches("veg(.*)"))
+                        buffer.append(tagN.substring(0, tagN.indexOf(" ")) + ";");
+                }
+
+                // Add DiningHall:ItemName:Cost:IDNumber
                 buffer.append(title + ":" +
                         menuList.get(x).text().replaceAll("\u00a0(\u00a0)+", ":") + ":" +
                         menuList.get(x).attr("href").replaceAll("[^0-9]", "") +"\n");
 
-                /*
-                // Returns elements as such
-                //Vegetable Tempura  ($7.00)  : vegetarian item
-                //Bistro Green Salad  ($6.00)   : vegan item
-                //Soy-Gingered Salmon Cake Salad  ($8.00)  : gluten free item
-                Elements vegans;
-                if((vegans = menuList.get(x).select("img")).size() > 0)
-                    buffer.append(menuList.get(x).text() + " : " + vegans.first().attr("alt") + '\n');
-                */
             }
             //    testObject.put("menu", "x is "+x);
              //           testObject.saveInBackground();

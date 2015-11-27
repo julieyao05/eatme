@@ -13,6 +13,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class SearchActivity extends Activity {
     EditText editSearch;
     ListView listView;
     private ArrayList<String> mItems;
-
+    private ArrayList<String> vegetarian;
+    private ArrayList<String> vegan;
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -33,7 +35,8 @@ public class SearchActivity extends Activity {
 
         editSearch = (EditText)findViewById(R.id.editText1);
         listView = (ListView)findViewById(R.id.search_list);
-
+        vegetarian = new ArrayList<String>();
+        vegan = new ArrayList<String>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("DiningHall");
         query.setLimit(1000);
         query.findInBackground(new FindCallback<ParseObject>(){
@@ -46,6 +49,13 @@ public class SearchActivity extends Activity {
                 for(ParseObject obj : list){
                     String menu = obj.getString("menu");
                     mItems.add(menu);
+                    String[] tags = obj.getString("tags").split(",");
+                    for(String t : tags) {
+                        if (t.equals("vegetarian"))
+                            vegetarian.add(menu);
+                        if (t.equals("vegan"))
+                            vegan.add(menu);
+                    }
                 }
             }
         });
@@ -60,22 +70,43 @@ public class SearchActivity extends Activity {
                 ArrayList<String> temp = new ArrayList<String>();
                 int textlength = editSearch.getText().length();
                 temp.clear();
-
-                for (int i = 0; i < mItems.size(); i++){
-                    if (textlength <= mItems.get(i).length()){
-                        if(editSearch.getText().toString().equalsIgnoreCase(
-                                (String) mItems.get(i).subSequence(0, textlength))){
-                            temp.add(mItems.get(i));
+                if(editSearch.getText().toString().equalsIgnoreCase("vegetarian")) {
+                    temp = vegetarian;
+                } else if(editSearch.getText().toString().equalsIgnoreCase("vegan")) {
+                    temp = vegan;
+                } else {
+                    for (int i = 0; i < mItems.size(); i++) {
+                        if (textlength <= mItems.get(i).length()) {
+                            if (mItems.get(i).matches("(?i:.*" + editSearch.getText().toString() + ".*)")) {
+                                temp.add(mItems.get(i));
+                            }
                         }
                     }
                 }
-                listView.setAdapter(new ArrayAdapter<String>(SearchActivity.this,android.R.layout.simple_list_item_1, temp));
+                ArrayAdapter<String> aa;
+                if (temp.size() == 0) {
+                    temp.add("No Items Found");
+                    aa = new ArrayAdapter<String>(SearchActivity.this, android.R.layout.simple_list_item_1, temp) {
+                        @Override
+                        public boolean isEnabled(int position) {
+                            return false;
+                        }
+                    };
+                } else {
+                    aa = new ArrayAdapter<String>(SearchActivity.this, android.R.layout.simple_list_item_1, temp);
+                }
+
+
+                listView.setAdapter(aa);
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
         });
     }
 }
