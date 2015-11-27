@@ -11,6 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="28dp"
+        android:singleLine="true"
         android:hint="@string/search_hint"
         android:ems="10" />
 

@@ -7,20 +7,20 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1.0">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calories"
             android:id="@+id/calories_button"
-            android:layout_weight="0.48" />
+            android:layout_weight="0.5" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Price"
             android:id="@+id/price_button"
-            android:layout_weight="0.47" />
+            android:layout_weight="0.5" />
 
     </LinearLayout>
 

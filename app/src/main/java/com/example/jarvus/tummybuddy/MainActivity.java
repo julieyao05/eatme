@@ -9,18 +9,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SearchView;
 
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.text.ParseException;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_DINING_HALL = "com.example.jarvus.tummybuddy.DINING_HALL";
-    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button trackerBt = (Button) findViewById(R.id.tracker);
+        trackerBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent intent = new Intent(MainActivity.this, CounterActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

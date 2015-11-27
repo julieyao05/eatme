@@ -17,7 +17,7 @@
         android:elevation="4dp"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
+    </android.support.v7.widget.Toolbar>
 <!--
         <ProgressBar
             android:id="@+id/toolbar_progress_bar"
@@ -29,26 +29,33 @@
             />
         -->
 
-    </android.support.v7.widget.Toolbar>
+
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="horizontal" >
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        android:id="@+id/search_page" />
+        <Button
+            android:id="@+id/search_page"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Search" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wish List"
-        android:id="@+id/wishList_page"
-        android:layout_gravity="center_horizontal" />
+        <Button
+            android:id="@+id/wishList_page"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Wish List"/>
+
+        <Button
+            android:id="@+id/tracker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tracker"/>
 
     </LinearLayout>
 

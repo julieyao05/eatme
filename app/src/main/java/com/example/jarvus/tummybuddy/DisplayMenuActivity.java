@@ -2,19 +2,21 @@ package com.example.jarvus.tummybuddy;
 
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -172,10 +174,48 @@ public class DisplayMenuActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int pos, long id) {
         super.onListItemClick(l, v, pos, id);
-        Object o = listView.getItemAtPosition(pos);
-        Item it = (Item) o;
+        final Context context = this;
+        final int position = pos;
+        PopupMenu popup = new PopupMenu(this, v);
 
-        Toast.makeText(this, it.getName() + " clicked.", Toast.LENGTH_SHORT).show();
+        popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Object o = listView.getItemAtPosition(position);
+                Item it = (Item) o;
+                switch (item.getItemId()) {
+                    case R.id.viewNutr:
+                        Menu.viewNutrition(it, context);
+                        return true;
+                    case R.id.trackItem:
+                        Menu.addToTracker(it, context);
+                        return true;
+                    case R.id.wishlist:
+                        Menu.addToWishlist(it, context);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.inflate(R.menu.display_menu);
+        popup.show();
+    }
+
+    public void onBackPressed() {
+        finish();
+    }
+    protected void addToTracker(Item it) {
+        //Implement
+        Toast.makeText(this, it.getName() + " Added To Tracker", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void addToWishlist(Item it) {
+        //Implement
+        Toast.makeText(this, it.getName() + " Added To WishList", Toast.LENGTH_SHORT).show();
+    }
+    protected void viewNutrition(Item it) {
+        Toast.makeText(this, "Loading " + it.getName() + " Nutrition Facts", Toast.LENGTH_SHORT).show();
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
         query.whereEqualTo("menu", it.getName());
@@ -208,11 +248,6 @@ public class DisplayMenuActivity extends ListActivity {
             Toast.makeText(this, "No Nutrition Facts Found", Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void onBackPressed() {
-        finish();
-    }
-
     private class ParseURL extends AsyncTask<String, Void, String> {
 
         @Override

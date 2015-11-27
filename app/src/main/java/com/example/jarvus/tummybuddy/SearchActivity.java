@@ -1,19 +1,23 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,30 +31,66 @@ public class SearchActivity extends Activity {
     private ArrayList<String> mItems;
     private ArrayList<String> vegetarian;
     private ArrayList<String> vegan;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
-
-        editSearch = (EditText)findViewById(R.id.editText1);
-        listView = (ListView)findViewById(R.id.search_list);
+        final Context context = this;
+        editSearch = (EditText) findViewById(R.id.editText1);
+        listView = (ListView) findViewById(R.id.search_list);
         vegetarian = new ArrayList<String>();
         vegan = new ArrayList<String>();
+
+        //
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                final int pos = position;
+
+                PopupMenu popup = new PopupMenu(context, arg1);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Object o = listView.getItemAtPosition(pos);
+                        Item it = new Item((String)o);
+                        switch (item.getItemId()) {
+                            case R.id.viewNutr:
+                                Menu.viewNutrition(it, context);
+                                return true;
+                            case R.id.trackItem:
+                                Menu.addToTracker(it, context);
+                                return true;
+                            case R.id.wishlist:
+                                Menu.addToWishlist(it, context);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.display_menu);
+                popup.show();
+            }
+        });
+
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("DiningHall");
         query.setLimit(1000);
-        query.findInBackground(new FindCallback<ParseObject>(){
+        query.findInBackground(new FindCallback<ParseObject>() {
 
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                if(e != null){
+                if (e != null) {
                     //Toast.makeText(ParseListActivity.this, "Error " + e, Toast.LENGTH_SHORT).show();
                 }
-                for(ParseObject obj : list){
+                for (ParseObject obj : list) {
                     String menu = obj.getString("menu");
                     mItems.add(menu);
                     String[] tags = obj.getString("tags").split(",");
-                    for(String t : tags) {
+                    for (String t : tags) {
                         if (t.equals("vegetarian"))
                             vegetarian.add(menu);
                         if (t.equals("vegan"))
@@ -70,9 +110,9 @@ public class SearchActivity extends Activity {
                 ArrayList<String> temp = new ArrayList<String>();
                 int textlength = editSearch.getText().length();
                 temp.clear();
-                if(editSearch.getText().toString().equalsIgnoreCase("vegetarian")) {
+                if (editSearch.getText().toString().equalsIgnoreCase("vegetarian")) {
                     temp = vegetarian;
-                } else if(editSearch.getText().toString().equalsIgnoreCase("vegan")) {
+                } else if (editSearch.getText().toString().equalsIgnoreCase("vegan")) {
                     temp = vegan;
                 } else {
                     for (int i = 0; i < mItems.size(); i++) {
@@ -109,4 +149,5 @@ public class SearchActivity extends Activity {
             }
         });
     }
+
 }

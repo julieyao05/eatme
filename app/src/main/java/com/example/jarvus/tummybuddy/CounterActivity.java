@@ -8,7 +8,7 @@ import android.os.Bundle;
  */
 public class CounterActivity extends Activity{
 
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.counter_activity);
@@ -26,15 +26,12 @@ public class CounterActivity extends Activity{
     }
 
     void calories_counter(){
-
     }
 
     void price_counter(){
-
     }
 
     void wishList(){
-
     }
 
 }
