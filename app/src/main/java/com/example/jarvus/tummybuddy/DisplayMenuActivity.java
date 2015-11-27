@@ -185,13 +185,13 @@ public class DisplayMenuActivity extends ListActivity {
                 Item it = (Item) o;
                 switch (item.getItemId()) {
                     case R.id.viewNutr:
-                        Menu.viewNutrition(it, context);
+                        MenuClick.viewNutrition(it, context);
                         return true;
                     case R.id.trackItem:
-                        Menu.addToTracker(it, context);
+                        MenuClick.addToTracker(it, context);
                         return true;
                     case R.id.wishlist:
-                        Menu.addToWishlist(it, context);
+                        MenuClick.addToWishlist(it, context);
                         return true;
                     default:
                         return false;

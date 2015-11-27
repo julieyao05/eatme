@@ -1,9 +1,14 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -30,7 +35,7 @@ public class WishListActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wishist_activity);
-
+        final Context context = this;
         // Initializing arrays
         wishListArray = new ArrayList<String>();
         todaysFoodArray = new ArrayList<String>();
@@ -40,6 +45,34 @@ public class WishListActivity extends Activity {
         aListView = (ListView)findViewById(R.id.available_list);
         unaListView = (ListView)findViewById(R.id.unAvailable_list);
 
+        AdapterView.OnItemClickListener av = new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                PopupMenu popup = new PopupMenu(context, arg1);
+                final String it = (String) arg0.getItemAtPosition(position);
+                final AdapterView adv = arg0;
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.remove:
+                                return removeFromWishlist(adv, it);
+                            case R.id.viewNutrWish:
+                                MenuClick.viewNutrition(new Item(it), context);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popup.inflate(R.menu.remove_menu);
+                popup.show();
+            }
+        };
+
+        aListView.setOnItemClickListener(av);
+        unaListView.setOnItemClickListener(av);
         // Retrieving data from "wishList"
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList");
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -84,5 +117,23 @@ public class WishListActivity extends Activity {
                 });
             }
         });
+    }
+
+    private boolean removeFromWishlist(AdapterView<?> adv, String item) {
+        try {
+            ArrayAdapter<String> adapter = (ArrayAdapter) adv.getAdapter();
+            adapter.remove(item);
+            adapter.notifyDataSetChanged();
+
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
+            List<ParseObject> objects = query.find();
+
+            for (ParseObject entry : objects)
+                entry.deleteInBackground();
+
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 }

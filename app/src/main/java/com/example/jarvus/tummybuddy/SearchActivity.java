@@ -59,13 +59,13 @@ public class SearchActivity extends Activity {
                         Item it = new Item((String)o);
                         switch (item.getItemId()) {
                             case R.id.viewNutr:
-                                Menu.viewNutrition(it, context);
+                                MenuClick.viewNutrition(it, context);
                                 return true;
                             case R.id.trackItem:
-                                Menu.addToTracker(it, context);
+                                MenuClick.addToTracker(it, context);
                                 return true;
                             case R.id.wishlist:
-                                Menu.addToWishlist(it, context);
+                                MenuClick.addToWishlist(it, context);
                                 return true;
                             default:
                                 return false;

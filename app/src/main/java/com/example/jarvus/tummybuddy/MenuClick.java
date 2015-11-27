@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Minh on 11/26/15.
  */
-public class Menu {
+public class MenuClick {
     protected static void addToTracker(Item it, Context context) {
         //Implement (use it.getName() to get the name of the item to do a query on)
         Toast.makeText(context, it.getName() + " Added To Tracker", Toast.LENGTH_SHORT).show();
@@ -58,7 +58,7 @@ public class Menu {
                 //e.printStackTrace();
             }
         } else {
-            Toast.makeText(context, "No Nutrition Facts Found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Nutrition Facts Unavailable", Toast.LENGTH_SHORT).show();
         }
 
     }
