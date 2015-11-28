@@ -25,6 +25,7 @@ public class WishListActivity extends Activity {
 
     private ArrayList<String> wishListArray;
     private ArrayList<String> todaysFoodArray;
+    private ArrayList<String> diningHallArray;
     private ArrayList<String> availableArray;
     private ArrayList<String> unAvailableArray;
     private ListView aListView;
@@ -39,13 +40,14 @@ public class WishListActivity extends Activity {
         // Initializing arrays
         wishListArray = new ArrayList<String>();
         todaysFoodArray = new ArrayList<String>();
+        diningHallArray = new ArrayList<String>();
         availableArray = new ArrayList<String>();
         unAvailableArray = new ArrayList<String>();
 
         aListView = (ListView)findViewById(R.id.available_list);
         unaListView = (ListView)findViewById(R.id.unAvailable_list);
 
-        // Showing "Remove" and "nutrition facts" buttons
+        // Showing "Remove" "nutrition value" when clicked
         AdapterView.OnItemClickListener av = new AdapterView.OnItemClickListener() {
 
             @Override
@@ -102,12 +104,14 @@ public class WishListActivity extends Activity {
                         for (ParseObject obj : list) {
                             String todaysFood = obj.getString("menu");
                             todaysFoodArray.add(todaysFood);
+                            String whichDiningHall = obj.getString("diningHall");
+                            diningHallArray.add(whichDiningHall);
                         }
 
                         //Checks if any food in wishlist is currently available
                         for (int i = 0; i < wishListArray.size(); i++) {
                             if (todaysFoodArray.indexOf(wishListArray.get(i)) != -1) {
-                                availableArray.add(wishListArray.get(i));
+                                availableArray.add(wishListArray.get(i) + " | "+diningHallArray.get(i));
                             } else {
                                 unAvailableArray.add(wishListArray.get(i));
                             }
@@ -127,7 +131,7 @@ public class WishListActivity extends Activity {
             adapter.remove(item);
             adapter.notifyDataSetChanged();
 
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter").whereMatches("Price", item);
             List<ParseObject> objects = query.find();
 
             for (ParseObject entry : objects)

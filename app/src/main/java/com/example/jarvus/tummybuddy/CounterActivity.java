@@ -1,10 +1,9 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,30 +21,25 @@ import java.util.List;
 public class CounterActivity extends Activity{
 
     private ArrayList<String> priceArray;
-    private ListView caloriesList;
+    private ListView priceList;
     private TextView conterText;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.counter_activity);
+        final Context context = this;
 
-        // Price counter
-        final Button button = (Button) findViewById(R.id.price_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                calories_counter();
-            }
-        });
-
+        // call price_counter() and calories_counter()
+        price_counter();
+        calrories_counter();
     }
 
-    void calories_counter(){
+    void price_counter(){
 
         //Initializing priceArray and carlriesList
         priceArray = new ArrayList<String>();
-        caloriesList = (ListView)findViewById(R.id.price_counter);
+        priceList = (ListView)findViewById(R.id.price_counter);
 
         // connecting to database
         ParseQuery<ParseObject> priceQuery = new ParseQuery<ParseObject>("Counter");
@@ -71,13 +65,14 @@ public class CounterActivity extends Activity{
                 tmpPrice = "Total : $"+Double.toString(totalPrice);
                 priceArray.add(tmpPrice);
 
-                caloriesList.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArray));
+                priceList.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArray));
 
             }
         });
     }
 
-    void price_counter(){
+    void calrories_counter(){
     }
+
 
 }
