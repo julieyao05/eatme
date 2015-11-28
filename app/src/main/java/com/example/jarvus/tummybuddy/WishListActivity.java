@@ -131,7 +131,7 @@ public class WishListActivity extends Activity {
             adapter.remove(item);
             adapter.notifyDataSetChanged();
 
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter").whereMatches("Price", item);
+            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
             List<ParseObject> objects = query.find();
 
             for (ParseObject entry : objects)
