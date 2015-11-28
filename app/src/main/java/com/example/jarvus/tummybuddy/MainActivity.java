@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Search Button
         Button searchBt = (Button) findViewById(R.id.search_page);
         searchBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        // WishList Button
         Button wishListBt = (Button) findViewById(R.id.wishList_page);
         wishListBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Tracker Button
         Button trackerBt = (Button) findViewById(R.id.tracker);
         trackerBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,8 +161,7 @@ public class MainActivity extends AppCompatActivity {
             } catch(com.parse.ParseException e) {
                 e.printStackTrace();
             }
+        } // end of onCreate()
+    } // end of ParseApplication
 
-
-        }
-    }
 }

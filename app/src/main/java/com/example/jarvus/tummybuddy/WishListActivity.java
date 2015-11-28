@@ -45,6 +45,7 @@ public class WishListActivity extends Activity {
         aListView = (ListView)findViewById(R.id.available_list);
         unaListView = (ListView)findViewById(R.id.unAvailable_list);
 
+        // Showing "Remove" and "nutrition facts" buttons
         AdapterView.OnItemClickListener av = new AdapterView.OnItemClickListener() {
 
             @Override
@@ -70,6 +71,7 @@ public class WishListActivity extends Activity {
                 popup.show();
             }
         };
+
 
         aListView.setOnItemClickListener(av);
         unaListView.setOnItemClickListener(av);
