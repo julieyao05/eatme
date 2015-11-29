@@ -14,12 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +25,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class DisplayMenuActivity extends ListActivity {
     public static final int MENU_ERROR = -1;
@@ -48,7 +43,6 @@ public class DisplayMenuActivity extends ListActivity {
     public static final String hour_type2 = "Mon - Thurs: %s \n Fri: %s | Sat - Sun: %s ";
     public static final String hour_type3 = "Mon - Fri: %s \n Sat - Sun: %s";
 
-    private TextView data_text;
     private String url_data;
     private int time = 0;
     private int hour = 0;
@@ -328,7 +322,7 @@ public class DisplayMenuActivity extends ListActivity {
                         items.add(strSp[1]);
                     } else {
                         strSp = strSp[0].split("\u00a0(\u00a0)+");
-                        if (strSp[1].matches("No .* daily special")) {
+                        if (strSp.length > 1 && strSp[1].matches("No .* daily special")) {
                             items.add(strSp[1]);
                         } else {
                             Item it = new Item(strSp[0]);
