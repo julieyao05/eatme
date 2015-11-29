@@ -7,11 +7,13 @@ public class Item {
     private String name;
     private String price;
     private String id;
+    private String diningHall;
 
     public Item(String n) {
         name = n;
         id = null;
         price = "No Price Indicated";
+        diningHall = "";
     }
     public void setPrice(String p) {
         price = p;
@@ -32,4 +34,7 @@ public class Item {
     public String getPrice() {
         return price;
     }
+
+    public String getDiningHall(){ return diningHall; }
+    public void setDiningHall(String d){ diningHall = d;}
 }

@@ -56,6 +56,7 @@ public class DisplayMenuActivity extends ListActivity {
     private ArrayList<Object> items;
     private ItemAdapter iAdapt;
     private  ListView listView;
+    String nameOfDiningHall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class DisplayMenuActivity extends ListActivity {
         listView.setAdapter(iAdapt);
         // Set variable as menu error by default
         int menu = getIntent().getIntExtra(MainActivity.EXTRA_DINING_HALL, MENU_ERROR);
-        String menuName = getString(R.string.error_loading);
+        nameOfDiningHall = getString(R.string.error_loading);
         TextView textView = (TextView) findViewById(R.id.menu_name);
 
         // Set hours of each dinning hall
@@ -81,57 +82,57 @@ public class DisplayMenuActivity extends ListActivity {
         TextView date_text = (TextView) findViewById(R.id.date);
 
         if(menu == MENU_SIXTY_FOUR) {
-            menuName = getString(R.string.button_sixty_four);
+            nameOfDiningHall = getString(R.string.button_sixty_four);
             dining_hours = String.format(hour_type1, "10 am - 9 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=64";
 
              }
         else if (menu == MENU_CANYON_VISTA) {
-            menuName = getString(R.string.button_canyon);
+            nameOfDiningHall = getString(R.string.button_canyon);
             dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=24";
         }
         else if (menu == MENU_CAFE_VENTANAS) {
-            menuName = getString(R.string.button_ventanas);
+            nameOfDiningHall = getString(R.string.button_ventanas);
             dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=18";
         }
         else if (menu == MENU_CLUB_MED) {
-            menuName = getString(R.string.button_med);
+            nameOfDiningHall = getString(R.string.button_med);
             dining_hours = String.format(hour_type3, "7:30 am - 2 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=15";
             is_Special = true;
         }
         else if (menu == MENU_FOODWORX) {
-            menuName = getString(R.string.button_foodworx);
+            nameOfDiningHall = getString(R.string.button_foodworx);
             dining_hours = String.format(hour_type2, "7:30 am - 10 pm", "7:30 am - 8 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=11";
         }
         else if (menu == MENU_GOODYS) {
-            menuName = getString(R.string.button_goodys);
+            nameOfDiningHall = getString(R.string.button_goodys);
             dining_hours = String.format(hour_type3, "8 am - 10 pm", "11 am - 10 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=06";
             is_Special = true;
         }
         else if (menu == MENU_PINES) {
-            menuName = getString(R.string.button_pines);
+            nameOfDiningHall = getString(R.string.button_pines);
             dining_hours = String.format(hour_type2, "7:30 am - 9 pm", "7:30 am - 8 pm", "10 am - 8 pm");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=01";
         }
         else if (menu == MENU_ROOTS) {
-            menuName = getString(R.string.button_roots);
+            nameOfDiningHall = getString(R.string.button_roots);
             dining_hours = String.format(hour_type3, "11 am - 8 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=32";
             is_Special = true;
         }
         else if (menu == MENU_BISTRO) {
-            menuName = getString(R.string.button_bistro);
+            nameOfDiningHall = getString(R.string.button_bistro);
             dining_hours = String.format(hour_type3, "11 am - 9 pm", "Closed");
             url_data = "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=27";
             is_Special = true;
         }
 
-        textView.setText(menuName);
+        textView.setText(nameOfDiningHall);
         hour_text.setText(dining_hours);
         date_text.setText(currentDate);
 
@@ -363,20 +364,21 @@ public class DisplayMenuActivity extends ListActivity {
 
             if(ls.length == 1 && ls[0].equals(""))
                 items.add("No menu items found");
-            else
-                for(String str : ls) {
+            else {
+                for (String str : ls) {
                     String[] strSp = str.split(":");
-                    if(strSp[0].equals("section")) {
+                    if (strSp[0].equals("section")) {
                         items.add(strSp[1]);
                     } else {
                         strSp = strSp[0].split("\u00a0(\u00a0)+");
                         Item it = new Item(strSp[0]);
-
-                        if(strSp.length > 1)
+                        it.setDiningHall(nameOfDiningHall);
+                        if (strSp.length > 1)
                             it.setPrice(strSp[1]);
                         items.add(it);
                     }
                 }
+            }
 
                 iAdapt.notifyDataSetChanged();
         }
