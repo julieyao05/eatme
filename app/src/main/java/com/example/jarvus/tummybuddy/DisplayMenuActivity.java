@@ -263,7 +263,9 @@ public class DisplayMenuActivity extends ListActivity {
                     numOfTags = menuList.get(x).getElementsByTag("p").size() +
                             menuList.get(x).getElementsByTag("li").size();
 
-                    buffer.append("section:" + section.get(section_ctr).text());
+                    while((tmp = section.get(section_ctr).text()).matches("[\n]|.*No.*daily special.*"))
+                        section_ctr++;
+                    buffer.append("section:" + tmp);
 
                     tmp = section.get(++section_ctr).text();
                     // Iterate every menu for breakfast, lunch or dinner.
