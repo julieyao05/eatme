@@ -101,14 +101,14 @@ public class CounterActivity extends Activity{
                 String tmpPrice;
                 for (ParseObject obj : list) {
                     String priceString = obj.getString("Price");
+                    String itemString = obj.getString("Item");
                     priceString = priceString.replaceAll("[$()]", "");
                     double priceDouble = Double.parseDouble(priceString);
                     priceArrayDouble.add(priceDouble);
 
                     DecimalFormat format = new DecimalFormat("0.00");
                     String formattedPrice = format.format(priceDouble);
-                    priceArrayString.add("$" + formattedPrice);
-                    //priceArrayString.add(todaysFood);
+                    priceArrayString.add("$" + formattedPrice + "\n("+itemString+")");
                 }
 
                 priceListView.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArrayString));
@@ -119,13 +119,14 @@ public class CounterActivity extends Activity{
 
     private boolean removeFromPriceCounter(AdapterView<?> adv, final String item) {
 
-
         //removing from the listView
         ArrayAdapter<String> adapter = (ArrayAdapter) adv.getAdapter();
         adapter.remove(item);
 
         // removing from total
-        totalPriceTextView.setText(calculatingTotalPrice(item));
+        String tmpString = item;
+        final String onlyPrice = (tmpString.replaceAll("[(a-zA-Z)]", "")).trim();
+        totalPriceTextView.setText(calculatingTotalPrice(onlyPrice));
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter");
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -137,7 +138,8 @@ public class CounterActivity extends Activity{
                 }
                 for (ParseObject obj : list) {
                     String price = obj.getString("Price");
-                    if(price.equals(item)){
+                    price = price.replaceAll("[()]", "");
+                    if(price.equals(onlyPrice)){
                         obj.deleteInBackground();
                         break;
                     }

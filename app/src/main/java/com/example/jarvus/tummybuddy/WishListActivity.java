@@ -131,6 +131,10 @@ public class WishListActivity extends Activity {
             adapter.remove(item);
             adapter.notifyDataSetChanged();
 
+            // excluding the name of dininghall
+            int index = item.indexOf("|");
+            item = item.substring(0, index-1);
+
             ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
             List<ParseObject> objects = query.find();
 

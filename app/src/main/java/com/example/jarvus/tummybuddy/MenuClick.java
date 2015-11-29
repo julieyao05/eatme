@@ -21,10 +21,6 @@ import java.util.List;
  * Created by Minh on 11/26/15.
  */
 public class MenuClick {
-    protected static void addToTracker(Item it, Context context) {
-        //Implement (use it.getName() to get the name of the item to do a query on)
-        Toast.makeText(context, it.getName() + " Added To Tracker", Toast.LENGTH_SHORT).show();
-    }
 
     protected static void addToWishlist(Item it, Context context) {
         //Implement (use it.getName() to get the name of the item to do a query on)
@@ -45,13 +41,13 @@ public class MenuClick {
                 }
                 for (ParseObject obj : list) {
                     String wishList = obj.getString("List");
-                    if(wishList.equals(clickedItem)){
+                    if (wishList.equals(clickedItem)) {
                         isDuplicate = true;
                     }
                 }
-                if(isDuplicate == true){
+                if (isDuplicate == true) {
                     Toast.makeText(wishListContext, clickedItem + " is already in your WishList! ", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     // connecting to database
                     ParseObject wishListObj = new ParseObject("WishList");
 
@@ -67,6 +63,21 @@ public class MenuClick {
                 }
             }
         });
+    }
+
+    protected static void addToTracker(Item it, Context context) {
+
+        ParseObject counterObj = new ParseObject("Counter");
+        counterObj.put("Price", it.getPrice());
+        counterObj.put("Item", it.getName());
+        //counterObj.put("Calories", clickedDiningHall);
+
+        counterObj.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+            }
+        });
+        Toast.makeText(context, it.getName() + " Added To Counter! ", Toast.LENGTH_SHORT).show();
     }
 
     protected static void viewNutrition(Item it, Context context) {
@@ -114,22 +125,6 @@ public class MenuClick {
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "2s0GrgbG5sY5OMVcemUzWe4TYLz86tLfRMp8ISTa", "wEjMG8yFL5GjR01PIzSLIpMlDJH5ghHXRPeoTmXm");
 
-
-/*
-            ParseObject diningObj = new ParseObject("DiningHall");
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
-            try{
-                List<ParseObject> objects = query.find();
-                if(objects.size() != 0) {
-                    for (ParseObject entry : objects) {
-                        entry.deleteInBackground();
-                    }
-                }
-                DataBase db = new DataBase();
-                db.collectData(diningObj);
-            } catch(com.parse.ParseException e) {
-                e.printStackTrace();
-            }*/
         } // end of onCreate()
     } // end of ParseApplication
 }
