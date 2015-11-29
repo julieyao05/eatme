@@ -16,6 +16,8 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,15 +26,20 @@ import java.util.List;
  */
 public class CounterActivity extends Activity{
 
-    private ArrayList<String> priceArray;
-    private ListView priceList;
+    private ArrayList<String> priceArrayString;
+    private ArrayList<Double> priceArrayDouble;
+    private ListView priceListView;
     final Context context = this;
+    private TextView totalPriceTextView;
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.counter_activity);
         final Context context = this;
+
+        totalPriceTextView = (TextView)findViewById(R.id.total_price);
 
         // call price_counter() and calories_counter()
         price_counter();
@@ -41,20 +48,19 @@ public class CounterActivity extends Activity{
 
     void price_counter(){
 
-        //Initializing priceArray and carlriesList
-        priceArray = new ArrayList<String>();
-        priceList = (ListView)findViewById(R.id.price_counter);
+        //Initializing priceArrayString and carlriesList
+        priceArrayString = new ArrayList<String>();
+        priceArrayDouble = new ArrayList<Double>();
+        priceListView = (ListView)findViewById(R.id.price_counter);
 
+        // Show price added to counter
+        showPriceList();
 
-        TextView tmp = (TextView)findViewById(R.id.price_text);
-        tmp.append("First = ");
         // Showing "Remove" "nutrition value" when clicked
         AdapterView.OnItemClickListener av = new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                TextView tmp = (TextView)findViewById(R.id.price_text);
-                tmp.append("Second = ");
                 PopupMenu popup = new PopupMenu(context, arg1);
 
                 final String it = (String) arg0.getItemAtPosition(position);
@@ -64,10 +70,7 @@ public class CounterActivity extends Activity{
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.remove:
-                                return removeFromWishlist(adv, it);
-                            case R.id.viewNutrWish:
-                                MenuClick.viewNutrition(new Item(it), context);
-                                return true;
+                                return removeFromPriceCounter(adv, it);
                             default:
                                 return false;
                         }
@@ -77,6 +80,13 @@ public class CounterActivity extends Activity{
                 popup.show();
             }
         };
+        priceListView.setOnItemClickListener(av);
+    }
+
+    void calrories_counter(){
+    }
+
+    void showPriceList(){
 
         // connecting to database
         ParseQuery<ParseObject> priceQuery = new ParseQuery<ParseObject>("Counter");
@@ -88,44 +98,71 @@ public class CounterActivity extends Activity{
                 if (e != null) {
                     //Toast.makeText(ParseListActivity.this, "Error " + e, Toast.LENGTH_SHORT).show();
                 }
-                double totalPrice = 0.0;
                 String tmpPrice;
                 for (ParseObject obj : list) {
                     String priceString = obj.getString("Price");
                     priceString = priceString.replaceAll("[$()]", "");
                     double priceDouble = Double.parseDouble(priceString);
-                    totalPrice += priceDouble;
-                    tmpPrice = Double.toString(priceDouble);
-                    priceArray.add("$" + tmpPrice);
-                    //priceArray.add(todaysFood);
+                    priceArrayDouble.add(priceDouble);
+
+                    DecimalFormat format = new DecimalFormat("0.00");
+                    String formattedPrice = format.format(priceDouble);
+                    priceArrayString.add("$" + formattedPrice);
+                    //priceArrayString.add(todaysFood);
                 }
-                tmpPrice = "Total : $" + Double.toString(totalPrice);
-                priceArray.add(tmpPrice);
 
-                priceList.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArray));
-
+                priceListView.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArrayString));
+                totalPriceTextView.setText(calculatingTotalPrice(""));
             }
         });
     }
 
-    void calrories_counter(){
+    private boolean removeFromPriceCounter(AdapterView<?> adv, final String item) {
+
+
+        //removing from the listView
+        ArrayAdapter<String> adapter = (ArrayAdapter) adv.getAdapter();
+        adapter.remove(item);
+
+        // removing from total
+        totalPriceTextView.setText(calculatingTotalPrice(item));
+
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter");
+        query.findInBackground(new FindCallback<ParseObject>() {
+
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e != null) {
+                    //Toast.makeText(ParseListActivity.this, "Error " + e, Toast.LENGTH_SHORT).show();
+                }
+                for (ParseObject obj : list) {
+                    String price = obj.getString("Price");
+                    if(price.equals(item)){
+                        obj.deleteInBackground();
+                        break;
+                    }
+                }
+            }
+        });
+        return true;
     }
 
-    private boolean removeFromWishlist(AdapterView<?> adv, String item) {
-        try {
-            ArrayAdapter<String> adapter = (ArrayAdapter) adv.getAdapter();
-            adapter.remove(item);
-            adapter.notifyDataSetChanged();
+    String calculatingTotalPrice(String remove){
 
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter").whereMatches("Price", item);
-            List<ParseObject> objects = query.find();
-
-            for (ParseObject entry : objects)
-                entry.deleteInBackground();
-
-            return true;
-        } catch (ParseException e) {
-            return false;
+        Double totalPrice = 0.0;
+        if(!remove.equals("")){
+            remove = remove.replaceAll("[$]", "");
+            double removePrice = Double.parseDouble(remove);
+            priceArrayDouble.remove(removePrice);
         }
+
+        //calculating total price
+        for(int i=0; i<priceArrayDouble.size(); i++){
+            totalPrice += priceArrayDouble.get(i);
+        }
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String stringTotalPrice = "Total : " + formatter.format(totalPrice);
+
+        return stringTotalPrice;
     }
 }
