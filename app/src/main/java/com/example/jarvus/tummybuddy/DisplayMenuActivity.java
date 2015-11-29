@@ -182,8 +182,7 @@ public class DisplayMenuActivity extends ListActivity {
         popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Object o = listView.getItemAtPosition(position);
-                Item it = (Item) o;
+                Item it = (Item) listView.getItemAtPosition(position);
                 switch (item.getItemId()) {
                     case R.id.viewNutr:
                         MenuClick.viewNutrition(it, context);
@@ -206,49 +205,7 @@ public class DisplayMenuActivity extends ListActivity {
     public void onBackPressed() {
         finish();
     }
-    protected void addToTracker(Item it) {
-        //Implement
-        Toast.makeText(this, it.getName() + " Added To Tracker", Toast.LENGTH_SHORT).show();
-    }
 
-    protected void addToWishlist(Item it) {
-        //Implement
-        Toast.makeText(this, it.getName() + " Added To WishList", Toast.LENGTH_SHORT).show();
-    }
-    protected void viewNutrition(Item it) {
-        Toast.makeText(this, "Loading " + it.getName() + " Nutrition Facts", Toast.LENGTH_SHORT).show();
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
-        query.whereEqualTo("menu", it.getName());
-
-        try {
-            List<ParseObject> objects = query.find();
-            if (objects != null && objects.size() > 0) {
-                for (ParseObject dealsObject : objects) {
-                    String uid = (String)dealsObject.get("distinct_id");
-                    if(uid.matches("[-+]?\\d*\\.?\\d+")) {
-                        it.setID(uid);
-                    }
-                }
-            }
-        } catch (ParseException e) {
-            Log.d("distinct_id", "Error: " + e.getMessage());
-        }
-
-        if (it.hasID()) {
-            try {
-                String nutri_link = "http://hdh.ucsd.edu/DiningMenus/nutritionfacts.aspx?i=" + it.getID();
-                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(nutri_link));
-                startActivity(myIntent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "No application can handle this request."
-                        + " Please install a web browser", Toast.LENGTH_SHORT).show();
-                //e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this, "No Nutrition Facts Found", Toast.LENGTH_SHORT).show();
-        }
-    }
     private class ParseURL extends AsyncTask<String, Void, String> {
 
         @Override
@@ -371,11 +328,16 @@ public class DisplayMenuActivity extends ListActivity {
                         items.add(strSp[1]);
                     } else {
                         strSp = strSp[0].split("\u00a0(\u00a0)+");
-                        Item it = new Item(strSp[0]);
-                        it.setDiningHall(nameOfDiningHall);
-                        if (strSp.length > 1)
-                            it.setPrice(strSp[1]);
-                        items.add(it);
+                        if (strSp[1].matches("No .* daily special")) {
+                            items.add(strSp[1]);
+                        } else {
+                            Item it = new Item(strSp[0]);
+                            it.setDiningHall(nameOfDiningHall);
+                            if (strSp.length > 1)
+                                it.setPrice(strSp[1]);
+                            items.add(it);
+                        }
+
                     }
                 }
             }

@@ -56,12 +56,19 @@ public class SearchActivity extends Activity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Object o = listView.getItemAtPosition(pos);
-                        Item it = new Item((String)o);
+                        Item it = new Item((String) o);
                         switch (item.getItemId()) {
                             case R.id.viewNutr:
                                 MenuClick.viewNutrition(it, context);
                                 return true;
                             case R.id.trackItem:
+                                ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("DiningHall").whereMatches("menu", it.getName());
+                                try {
+                                    for(ParseObject obj : query.find())
+                                        it.setPrice(obj.getString("price"));
+                                } catch (ParseException e) {
+                                    // do nothing
+                                }
                                 MenuClick.addToTracker(it, context);
                                 return true;
                             case R.id.wishlist:

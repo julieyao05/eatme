@@ -69,14 +69,14 @@ public class CounterActivity extends Activity{
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.remove:
+                            case R.id.remove_c:
                                 return removeFromPriceCounter(adv, it);
                             default:
                                 return false;
                         }
                     }
                 });
-                popup.inflate(R.menu.remove_menu);
+                popup.inflate(R.menu.remove_counter);
                 popup.show();
             }
         };
@@ -98,17 +98,21 @@ public class CounterActivity extends Activity{
                 if (e != null) {
                     //Toast.makeText(ParseListActivity.this, "Error " + e, Toast.LENGTH_SHORT).show();
                 }
-                String tmpPrice;
                 for (ParseObject obj : list) {
                     String priceString = obj.getString("Price");
                     String itemString = obj.getString("Item");
-                    priceString = priceString.replaceAll("[$()]", "");
-                    double priceDouble = Double.parseDouble(priceString);
+                    priceString = priceString.replaceAll("[$()\\s]", "");
+                    double priceDouble;
+                    try {
+                        priceDouble = Double.parseDouble(priceString);
+                    } catch (NumberFormatException ex) {
+                        priceDouble = 0.00;
+                    }
                     priceArrayDouble.add(priceDouble);
 
                     DecimalFormat format = new DecimalFormat("0.00");
                     String formattedPrice = format.format(priceDouble);
-                    priceArrayString.add("$" + formattedPrice + "\n("+itemString+")");
+                    priceArrayString.add("$" + formattedPrice + "\n(" + itemString + ")");
                 }
 
                 priceListView.setAdapter(new ArrayAdapter<String>(CounterActivity.this, android.R.layout.simple_list_item_1, priceArrayString));
@@ -166,5 +170,26 @@ public class CounterActivity extends Activity{
         String stringTotalPrice = "Total : " + formatter.format(totalPrice);
 
         return stringTotalPrice;
+    }
+
+    public void clearPriceCount(View view) {
+        ArrayAdapter<String> adapter = (ArrayAdapter) priceListView.getAdapter();
+        priceArrayDouble.clear();
+        priceArrayString.clear();
+        adapter.clear();
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Counter");
+        query.findInBackground(new FindCallback<ParseObject>() {
+
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                for(ParseObject obj : list)
+                    obj.deleteInBackground();
+            }
+        });
+        totalPriceTextView.setText(calculatingTotalPrice(""));
+    }
+
+    public void clearCalorieCount(View view) {
+
     }
 }

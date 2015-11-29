@@ -46,7 +46,7 @@ public class MenuClick {
                     }
                 }
                 if (isDuplicate == true) {
-                    Toast.makeText(wishListContext, clickedItem + " is already in your WishList! ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(wishListContext, clickedItem + " is already in your WishList!", Toast.LENGTH_SHORT).show();
                 } else {
                     // connecting to database
                     ParseObject wishListObj = new ParseObject("WishList");
@@ -59,7 +59,7 @@ public class MenuClick {
                         public void done(ParseException e) {
                         }
                     });
-                    Toast.makeText(wishListContext, clickedItem + " Added To WishList, ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(wishListContext, clickedItem + " Added To WishList.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

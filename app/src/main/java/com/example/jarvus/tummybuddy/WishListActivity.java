@@ -35,7 +35,7 @@ public class WishListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wishist_activity);
+        setContentView(R.layout.wishlist_activity);
         final Context context = this;
         // Initializing arrays
         wishListArray = new ArrayList<String>();
@@ -62,7 +62,8 @@ public class WishListActivity extends Activity {
                             case R.id.remove:
                                 return removeFromWishlist(adv, it);
                             case R.id.viewNutrWish:
-                                MenuClick.viewNutrition(new Item(it), context);
+                                Item name = new Item(it.split("\\|")[0].trim());
+                                MenuClick.viewNutrition(name, context);
                                 return true;
                             default:
                                 return false;
@@ -110,8 +111,9 @@ public class WishListActivity extends Activity {
 
                         //Checks if any food in wishlist is currently available
                         for (int i = 0; i < wishListArray.size(); i++) {
-                            if (todaysFoodArray.indexOf(wishListArray.get(i)) != -1) {
-                                availableArray.add(wishListArray.get(i) + " | "+diningHallArray.get(i));
+                            int x;
+                            if ((x = todaysFoodArray.indexOf(wishListArray.get(i))) != -1) {
+                                availableArray.add(wishListArray.get(i) + " | "+ diningHallArray.get(x));
                             } else {
                                 unAvailableArray.add(wishListArray.get(i));
                             }
