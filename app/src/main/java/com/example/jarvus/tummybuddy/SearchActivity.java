@@ -142,8 +142,6 @@ public class SearchActivity extends Activity {
                 } else {
                     aa = new ArrayAdapter<String>(SearchActivity.this, android.R.layout.simple_list_item_1, temp);
                 }
-
-
                 listView.setAdapter(aa);
             }
 

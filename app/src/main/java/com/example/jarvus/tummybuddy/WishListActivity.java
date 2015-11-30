@@ -128,17 +128,31 @@ public class WishListActivity extends Activity {
     }
 
     private boolean removeFromWishlist(AdapterView<?> adv, String item) {
+
         try {
             ArrayAdapter<String> adapter = (ArrayAdapter) adv.getAdapter();
             adapter.remove(item);
             adapter.notifyDataSetChanged();
 
-            // excluding the name of dininghall
-            int index = item.indexOf("|");
-            item = item.substring(0, index-1);
 
-            ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
+            // excluding the name of dininghall for "available item"
+            int index = item.indexOf("|");
+            if(index != -1){
+                item = item.substring(0, index-1);
+            }
+
+            ParseQuery<ParseObject> query;
+            index = item.indexOf("(");
+            // handling if item contains parenthesis
+            if( index != -1){
+                item = item.substring(0, index-1);
+                query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
+            }else{
+                query = new ParseQuery<ParseObject>("WishList").whereMatches("List", item);
+            }
+
             List<ParseObject> objects = query.find();
+            //tmp.append("obj = "+ objects.toString());
 
             for (ParseObject entry : objects)
                 entry.deleteInBackground();
