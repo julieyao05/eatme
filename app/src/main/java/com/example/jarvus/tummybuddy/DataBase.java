@@ -127,7 +127,6 @@ public class DataBase {
             Document doc = Jsoup.connect(strings[0]).get();
             Elements menuList = doc.select("li[style] a");
 
-
             // Get title
             String title = doc.title();
 

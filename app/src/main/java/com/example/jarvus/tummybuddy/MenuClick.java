@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,12 +16,19 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.util.List;
 
 /**
  * Created by Minh on 11/26/15.
  */
 public class MenuClick {
+
+    public static ParseObject counterObj;
+    public static String globalCal;
 
     protected static void addToWishlist(Item it, Context context) {
         //Implement (use it.getName() to get the name of the item to do a query on)
@@ -67,16 +75,58 @@ public class MenuClick {
 
     protected static void addToTracker(Item it, Context context) {
 
-        ParseObject counterObj = new ParseObject("Counter");
+        final Item finalIt = it;
+        final Context finalCont = context;
+
+        counterObj = new ParseObject("Counter");
         counterObj.put("Price", it.getPrice());
         counterObj.put("Item", it.getName());
+
         //counterObj.put("Calories", clickedDiningHall);
+
+        //Test
+
+        //Test End
+
+      //  counterObj.put("Calories", globalCal);
 
         counterObj.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                String caloriesData;
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
+                query.whereEqualTo("menu", finalIt.getName());
+
+                try {
+                    List<ParseObject> objects = query.find();
+                    if (objects != null && objects.size() > 0) {
+                        for (ParseObject dealsObject : objects) {
+                            String uid = (String) dealsObject.get("distinct_id");
+                            if (uid.matches("[-+]?\\d*\\.?\\d+")) {
+                                finalIt.setID(uid);
+                            }
+                        }
+                    }
+                } catch (ParseException e1) {
+                    Log.d("distinct_id", "Error: " + e1.getMessage());
+                }
+
+                if (finalIt.hasID()) {
+                    try {
+                        String nutri_link = "http://hdh.ucsd.edu/DiningMenus/nutritionfacts.aspx?i=" + finalIt.getID();
+                        (new ParseURL()).execute(new String[]{nutri_link});
+                    } catch (ActivityNotFoundException e2) {
+                        Toast.makeText(finalCont, "No application can handle this request."
+                                + " Please install a web browser", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //Toast.makeText(context, "Nutrition Facts Unavailable", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
+
         Toast.makeText(context, it.getName() + " Added To Counter! ", Toast.LENGTH_SHORT).show();
     }
 
@@ -127,4 +177,53 @@ public class MenuClick {
 
         } // end of onCreate()
     } // end of ParseApplication
+
+    private static class ParseURL extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings){
+
+            StringBuffer buffer = new StringBuffer();
+
+            String calories = "";
+
+            try{
+                Document doc = Jsoup.connect(strings[0]).get();
+
+                Elements caloriesList;
+
+                caloriesList = doc.select("table#tblFacts span");
+
+                String tmp = caloriesList.get(0).toString();
+                tmp = tmp.replaceAll("[<a-zA-Z>]", "");
+                tmp = tmp.replaceAll("\\W", "");
+                buffer.append(tmp);
+            }catch(Throwable t){
+                t.printStackTrace();
+            }
+
+            counterObj.put("Calories", buffer.toString());
+
+            counterObj.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e4) {
+
+                }
+            });
+
+            return buffer.toString();
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+
+            //ParseObject counterObj = new ParseObject("Counter");
+          //  counterObj.put("Calories", s);
+            globalCal = s;
+
+            Log.e("done", "*******************************************|||");
+
+        }
+    }
 }

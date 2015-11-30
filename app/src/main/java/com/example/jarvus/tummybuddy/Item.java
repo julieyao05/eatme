@@ -14,6 +14,7 @@ public class Item {
         id = null;
         price = "No Price Indicated";
         diningHall = "";
+
     }
     public void setPrice(String p) {
         price = p;
@@ -37,4 +38,5 @@ public class Item {
 
     public String getDiningHall(){ return diningHall; }
     public void setDiningHall(String d){ diningHall = d;}
+
 }
