@@ -164,10 +164,6 @@ public class DataBase {
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             storingIntoDatabase(s);
-        //    testObject.put("menu", "test3");
-            //testObject.put("price", s.length());
-            //testObject.saveInBackground();
-
         }
     }
 }

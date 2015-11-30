@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // WishList Button
         Button wishListBt = (Button) findViewById(R.id.wishList_page);
         wishListBt.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
 
             ParseObject diningObj = new ParseObject("DiningHall");
             ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
+            query.setLimit(1000);
+
             try{
                 List<ParseObject> objects = query.find();
                 if(objects.size() != 0) {
