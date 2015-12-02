@@ -149,9 +149,8 @@ public class MainActivity extends AppCompatActivity {
             ParseObject diningObj = new ParseObject("DiningHall");
             ParseQuery<ParseObject> query = ParseQuery.getQuery("DiningHall");
             query.setLimit(1000);
-
             try{
-                List<ParseObject> objects = query.find();
+                final List<ParseObject> objects = query.find();
                 if(objects.size() != 0) {
                     for (ParseObject entry : objects) {
                         entry.deleteInBackground();

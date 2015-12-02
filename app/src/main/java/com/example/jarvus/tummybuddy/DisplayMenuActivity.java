@@ -1,21 +1,16 @@
 package com.example.jarvus.tummybuddy;
 
 import android.app.ListActivity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.PopupMenu.OnMenuItemClickListener;
-
+import android.widget.TextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -337,7 +332,6 @@ public class DisplayMenuActivity extends ListActivity {
                     }
                 }
             }
-
                 iAdapt.notifyDataSetChanged();
         }
     }
