@@ -338,8 +338,7 @@ public class CounterActivity extends Activity{
 
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                for(ParseObject obj : list)
-                    obj.deleteInBackground();
+                ParseObject.deleteAllInBackground(list);
             }
         });
         totalPriceTextView.setText(calculatingTotalPrice(""));
@@ -355,8 +354,7 @@ public class CounterActivity extends Activity{
 
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                for(ParseObject obj : list)
-                    obj.deleteInBackground();
+                ParseObject.deleteAllInBackground(list);
             }
         });
         totalCaloriesTextView.setText(calculatingTotalCalories(""));

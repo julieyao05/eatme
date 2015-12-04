@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseObject;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.List;
@@ -143,6 +145,11 @@ public class MainActivity extends AppCompatActivity {
         public void onCreate() {
             super.onCreate();
 
+            ParseACL defaultACL=new ParseACL();
+            defaultACL.setPublicReadAccess(true);
+            defaultACL.setPublicWriteAccess(true);
+            ParseACL.setDefaultACL(defaultACL, true);
+
             Parse.enableLocalDatastore(this);
             Parse.initialize(this, "2s0GrgbG5sY5OMVcemUzWe4TYLz86tLfRMp8ISTa", "wEjMG8yFL5GjR01PIzSLIpMlDJH5ghHXRPeoTmXm");
 
@@ -152,9 +159,7 @@ public class MainActivity extends AppCompatActivity {
             try{
                 final List<ParseObject> objects = query.find();
                 if(objects.size() != 0) {
-                    for (ParseObject entry : objects) {
-                        entry.deleteInBackground();
-                    }
+                    ParseObject.deleteAllInBackground(objects);
                 }
                 DataBase db = new DataBase();
                 db.collectData(diningObj);
