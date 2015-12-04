@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -38,10 +39,13 @@ public class DisplayMenuActivity extends ListActivity {
     public static final String hour_type2 = "Mon - Thurs: %s \n Fri: %s | Sat - Sun: %s ";
     public static final String hour_type3 = "Mon - Fri: %s \n Sat - Sun: %s";
 
+    private static Boolean loading = true;
+    private static ProgressBar progressBar;
+
+    private boolean is_Special = false;
     private String url_data;
     private int time = 0;
     private int hour = 0;
-    private boolean is_Special = false;
     private ArrayList<Object> items;
     private ItemAdapter iAdapt;
     private  ListView listView;
@@ -51,7 +55,12 @@ public class DisplayMenuActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_menu);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
+        if(loading)
+            progressBar.setVisibility(View.VISIBLE);
+        else
+            progressBar.setVisibility(View.GONE);
 
         listView = getListView();
         items = new ArrayList<>();
@@ -130,8 +139,6 @@ public class DisplayMenuActivity extends ListActivity {
         Button btn2 = (Button) findViewById(R.id.button2);
         Button btn3 = (Button) findViewById(R.id.button3);
 
-
-        //data_text.setMovementMethod(new ScrollingMovementMethod());
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -193,6 +200,12 @@ public class DisplayMenuActivity extends ListActivity {
 
     public void onBackPressed() {
         finish();
+    }
+
+    public static void endLoading() {
+        if(progressBar != null)
+            progressBar.setVisibility(View.GONE);
+        loading = false;
     }
 
     private class ParseURL extends AsyncTask<String, Void, String> {

@@ -44,8 +44,11 @@ public class DataBase {
          "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=32",
         "http://hdh.ucsd.edu/DiningMenus/default.aspx?i=27"};
 
-        for (String load : toLoad) {
-            new ParseURL().execute(new String[]{load});
+        for (int i = 0; i < toLoad.length; i++) {
+            if(i != toLoad.length - 1)
+                new ParseURL().execute(new String[]{toLoad[i], "cont"});
+            else
+                new ParseURL().execute(new String[]{toLoad[i], "last"});
         }
     }
 
@@ -117,42 +120,44 @@ public class DataBase {
 
 
     private class ParseURL extends AsyncTask<String, Void, String> {
-
+        private Boolean last;
         @Override
         protected String doInBackground(String... strings){
 
             StringBuffer buffer = new StringBuffer();
 
-            try{
-            Document doc = Jsoup.connect(strings[0]).get();
-            Elements menuList = doc.select("li[style] a");
+            try {
+                if(strings[1].equals("cont"))
+                    last = false;
+                else
+                    last = true;
 
-            // Get title
-            String title = doc.title();
+                Document doc = Jsoup.connect(strings[0]).get();
+                Elements menuList = doc.select("li[style] a");
 
-            title = title.substring(0, title.indexOf('|')).trim();
+                // Get title
+                String title = doc.title();
 
-            // if you split by : and get only 3 elements it is hall : name : pageID
-            // if you get four elements it is hall : name : cost : pageID
+                title = title.substring(0, title.indexOf('|')).trim();
 
-            for(int x = 0; x<menuList.size(); x++){
+                // if you split by : and get only 3 elements it is hall : name : pageID
+                // if you get four elements it is hall : name : cost : pageID
+                for(int x = 0; x<menuList.size(); x++){
 
-                //Add Tags as such tag1;tag2;tag3;
-                for (Element tag : menuList.get(x).siblingElements().select("img")) {
-                    String tagN = tag.attr("alt");
-                    if(tagN.matches("veg(.*)"))
-                        buffer.append(tagN.substring(0, tagN.indexOf(" ")) + ";");
+                    //Add Tags as such tag1;tag2;tag3;
+                    for (Element tag : menuList.get(x).siblingElements().select("img")) {
+                        String tagN = tag.attr("alt");
+                        if(tagN.matches("veg(.*)"))
+                            buffer.append(tagN.substring(0, tagN.indexOf(" ")) + ";");
+                    }
+
+                    // Add DiningHall:ItemName:Cost:IDNumber
+                    buffer.append(title + ":" +
+                            menuList.get(x).text().replaceAll("\u00a0(\u00a0)+", ":") + ":" +
+                            menuList.get(x).attr("href").replaceAll("[^0-9]", "") +"\n");
+
                 }
-
-                // Add DiningHall:ItemName:Cost:IDNumber
-                buffer.append(title + ":" +
-                        menuList.get(x).text().replaceAll("\u00a0(\u00a0)+", ":") + ":" +
-                        menuList.get(x).attr("href").replaceAll("[^0-9]", "") +"\n");
-
-            }
-            //    testObject.put("menu", "x is "+x);
-             //           testObject.saveInBackground();
-             } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -163,6 +168,9 @@ public class DataBase {
         protected void onPostExecute(String s){
             super.onPostExecute(s);
             storingIntoDatabase(s);
+            if(last)
+                DisplayMenuActivity.endLoading();
+
         }
     }
 }

@@ -184,17 +184,6 @@ public class MenuClick {
 
     }
 
-
-    public static class ParseApplication extends Application {
-
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            Parse.enableLocalDatastore(this);
-            Parse.initialize(this, "2s0GrgbG5sY5OMVcemUzWe4TYLz86tLfRMp8ISTa", "wEjMG8yFL5GjR01PIzSLIpMlDJH5ghHXRPeoTmXm");
-        }
-    }
-
     private static class ParseCaloriesURL extends AsyncTask<String, Void, String> {
 
         @Override
