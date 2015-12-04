@@ -338,6 +338,7 @@ public class CounterActivity extends Activity{
 
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+            if(e == null)
                 ParseObject.deleteAllInBackground(list);
             }
         });
@@ -354,6 +355,7 @@ public class CounterActivity extends Activity{
 
             @Override
             public void done(List<ParseObject> list, ParseException e) {
+            if(e == null)
                 ParseObject.deleteAllInBackground(list);
             }
         });
