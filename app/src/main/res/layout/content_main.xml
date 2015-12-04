@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/button_sixty_four"
+        android:id="@+id/sixty_four"
         android:onClick="sixtyFourClicked"/>
     <Button
         android:layout_width="match_parent"
