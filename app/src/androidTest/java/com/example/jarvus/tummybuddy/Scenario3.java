@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.instanceOf;
 
 /**
  * Created by Min-Hsuan Yao on 12/3/15.
+ * Given that I see the dining halls, when I click on the menu name, then I should see a list of all the options I can choose from.
  */
 public class Scenario3 extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity displayActivity;
@@ -37,13 +38,13 @@ public class Scenario3 extends ActivityInstrumentationTestCase2<MainActivity> {
     public void testOptions() throws InterruptedException {
         Thread.sleep(3000);
 
-        //when click a dining hall
+        //Given that I see the dining halls
         onView(withId(R.id.sixty_four)).perform(click());
         Thread.sleep(3000);
-        //and click a meal button
+        //when I click on the menu name
         onView(withId(R.id.button2)).perform(click());
         Thread.sleep(3000);
-        //should see a list of food options displayed
+        //then I should see a list of all the options I can choose from
         onData(instanceOf(String.class)).inAdapterView(allOf(withId(android.R.id.list), isDisplayed()));
 
     }

@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by Min-Hsuan Yao on 12/2/15.
+ * Given that there is a search bar, when I type in my favorite food or preference, then I should see if it is available today.
  */
 public class Scenario2 extends ActivityInstrumentationTestCase2<MainActivity> {
     private MainActivity mainActivity;
@@ -40,12 +41,13 @@ public class Scenario2 extends ActivityInstrumentationTestCase2<MainActivity> {
 
     @Test
     public void testSearch() throws InterruptedException {
-        //when click on the search bar, should be directed to a search page
+        //Given that there is a search bar
         onView(withId(R.id.search_page)).perform(click());
-        //when search for a food item, it should come up
+        //when I type in my favorite food or preference
         onView(withId(R.id.editText1)).perform(typeText("Breakfast Burrito")).check(matches(isDisplayed()));
         //wait a bit for the text to process
         Thread.sleep(6000);
+        //then I should see if it is available today
         onView(allOf(withText("Breakfast Burrito"), withParent(withId(R.id.search_list))));
 
     }
