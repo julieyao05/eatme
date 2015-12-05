@@ -2,7 +2,6 @@ package com.example.jarvus.tummybuddy;
 
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import android.support.test.InstrumentationRegistry;
 
 
